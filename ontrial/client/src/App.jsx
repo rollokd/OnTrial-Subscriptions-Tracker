@@ -1,14 +1,14 @@
-
-import { ChakraProvider } from '@chakra-ui/react';
-import { SubscriptionsProvider } from './context/SubscriptionsContext';
+import { ChakraProvider, Container } from '@chakra-ui/react';
 import Dashboard from './components/Dashboard';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <ChakraProvider>
-      <SubscriptionsProvider>
+      <Container maxW="container.xl" px={20}>
+        <Navbar/>
         <Dashboard />
-      </SubscriptionsProvider>
+      </Container>
     </ChakraProvider>
   );
 }
