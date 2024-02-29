@@ -11,12 +11,13 @@ const SubscriptionItem = ({ subscription, onEdit }) => {
     billingDate = addMonths(billingDate, 1);
   }
   const daysLeft = differenceInDays(billingDate, today);
-  const renewalText = daysLeft === 1 ? 'Renewal in 1 day' : `${daysLeft} days left`;
+  const renewalText = daysLeft > 1 ? `${daysLeft} days left` :
+                    daysLeft === 1 ? 'Renewal in 1 day' :
+                    daysLeft === 0 ? 'Renewal today' : 'Renewal date passed';
 
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} m={2} boxShadow="lg" display="flex" justifyContent="" alignItems="center">
-
+    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} m={2} boxShadow="lg" maxW="sm" display="flex" justifyContent="" alignItems="center">
       {/* Subscriptions Name */}
       <Text fontSize="xl" fontWeight="bold" flexShrink={0}>{subscription.name}</Text>
 
@@ -30,6 +31,7 @@ const SubscriptionItem = ({ subscription, onEdit }) => {
 
       {/* edit button */}
       <Button onClick={onEdit} colorScheme="yellow" ml={4}>Edit</Button>
+      
     </Box>
   );
 };
