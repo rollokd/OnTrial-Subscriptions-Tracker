@@ -1,11 +1,13 @@
 import SubscriptionItem from "./SubscriptionItem";
-import mockSubscriptions from "../mockSubscriptions"
 
-const SubscriptionList = ({onEdit}) => {
+const SubscriptionList = ({onEdit, subscriptions}) => {
+
+
+
   return (
     <div>
-      {mockSubscriptions.map(subscription => (
-        <SubscriptionItem key={subscription.id} subscription={subscription} onEdit={() => onEdit(subscription)} />
+      {subscriptions.map(subscription => (
+        <SubscriptionItem key={subscription._id} subscription={subscription} onEdit={() => onEdit(subscription)} />
       ))}
     </div>
   );

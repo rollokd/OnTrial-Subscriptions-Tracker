@@ -1,13 +1,18 @@
 
 import { Box, Flex, Text, Button, Spacer } from '@chakra-ui/react';
-import { differenceInDays } from 'date-fns';
+import { differenceInDays, addMonths, isBefore } from 'date-fns';
 
 const SubscriptionItem = ({ subscription, onEdit }) => {
   // Calculate days left until the billing date
   const today = new Date();
-  const billingDate = new Date(subscription.billingDate);
+  let billingDate = new Date(subscription.billingDate);
+  // if date is in past and sub is still active
+  while (isBefore(billingDate, today)) {
+    billingDate = addMonths(billingDate, 1);
+  }
   const daysLeft = differenceInDays(billingDate, today);
-  const renewalText = daysLeft > 1 ? `${daysLeft} days left` : 'Renewal in 1 day';
+  const renewalText = daysLeft === 1 ? 'Renewal in 1 day' : `${daysLeft} days left`;
+
 
   return (
     <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4} m={2} boxShadow="lg" display="flex" justifyContent="" alignItems="center">

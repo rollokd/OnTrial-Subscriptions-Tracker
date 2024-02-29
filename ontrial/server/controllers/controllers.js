@@ -23,4 +23,31 @@ const addSub = async (req,res) => {
  }
 }
 
-module.exports = {getSubs,addSub}
+const editSub = async (req, res) => {
+  const { id } = req.params;
+  console.log(`Updating subscription with ID: ${id}`); // Debugging log
+  try {
+    const subscription = await Subscription.findByIdAndUpdate(id, req.body, { new: true });
+    if (!subscription) {
+      return res.status(404).send('Subscription not found');
+    }
+    res.send(subscription);
+  } catch (error) {
+    console.error('Error updating subscription:', error);
+    res.status(500).send('Error updating subscription');
+  }
+};
+
+const deleteSub = async (req, res) => {
+  try {
+    const deletedSubscription = await Subscription.findByIdAndDelete(req.params.id);
+    if (!deletedSubscription) {
+      return res.status(404).send('Subscription not found');
+    }
+    res.send(deletedSubscription);
+  } catch (error) {
+    res.status(500).send('Error deleting subscription');
+  }
+};
+
+module.exports = {getSubs,addSub,editSub,deleteSub}
