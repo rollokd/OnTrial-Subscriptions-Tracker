@@ -2,7 +2,7 @@
 import { Box, Flex, Text, Button, Spacer } from '@chakra-ui/react';
 import { differenceInDays } from 'date-fns';
 
-const SubscriptionItem = ({ subscription }) => {
+const SubscriptionItem = ({ subscription, onEdit }) => {
   // Calculate days left until the billing date
   const today = new Date();
   const billingDate = new Date(subscription.billingDate);
@@ -24,7 +24,7 @@ const SubscriptionItem = ({ subscription }) => {
       </Flex>
 
       {/* edit button */}
-      <Button colorScheme="yellow" ml={4}>Edit</Button>
+      <Button onClick={onEdit} colorScheme="yellow" ml={4}>Edit</Button>
     </Box>
   );
 };
