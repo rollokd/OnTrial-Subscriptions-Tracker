@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Center } from '@chakra-ui/react';
+import { Box, Flex, Button, Text } from '@chakra-ui/react';
 import SubscriptionList from './SubscriptionList';
 import AddEditSubscriptionForm from './AddEditSubscriptionForm';
 
@@ -37,11 +37,19 @@ const Dashboard = () => {
   const averageExpenses = totalCost.toFixed(2);
 
   return (
-    <Center flexDirection="column" minH="100vh">
-      <Box w={{ base: "88%", md: "85%", lg: "80%" }} maxW="xl" mt={5}>
-        <Flex justifyContent="space-between" alignItems="center" p={4}>
+    <Box 
+      bg="#ADC4CE"
+      width="795px"
+      borderRadius="md">
+
+      <Flex justifyContent="space-between" alignItems="center" p={4}>
+          {/** SUBS Text */}
           <Text fontSize="2xl" fontWeight="bold">Subscriptions</Text>
-          <Button colorScheme="teal" onClick={() => setIsFormOpen(true)}>Add Subscription</Button>
+
+          {/** ADDSUBS Text */}
+          <Button colorScheme="teal" onClick={() => setIsFormOpen(true)}>
+            Add Subscription
+          </Button>
         </Flex>
         <SubscriptionList subscriptions={subscriptions} onEdit={handleEdit} />
         <AddEditSubscriptionForm 
@@ -50,15 +58,15 @@ const Dashboard = () => {
           subscription={currentSubscription} 
           refreshSubscriptions={fetchSubscriptions} 
         />
-        <Flex justifyContent="space-between" alignItems="center" p={4} bg="gray.200" borderRadius="md" mt={7}>
-          <Box>
-            <Text fontSize="lg">Average Expenses</Text>
+        <Flex justifyContent="space-between" alignItems="center" p={2} bg="gray.200" w="795px"
+        borderRadius="xl">
+          <Box borderRadius="lg">
+            <Text fontSize="xl">Average Expenses</Text>
             <Text fontSize="sm" as="i" fontStyle="italic">per month</Text>
           </Box>
-          <Text fontSize="lg">${averageExpenses}</Text>
+          <Text fontSize="xl">${averageExpenses}</Text>
         </Flex>
       </Box>
-    </Center>
   );
 };
 

@@ -28,6 +28,7 @@ const AddEditSubscriptionForm = ({ isOpen, onClose, subscription, refreshSubscri
       setCost(subscription.cost.toString());
       setBillingDate(subscription.billingDate.slice(0, 10));
       setEndDate(subscription.endDate ? subscription.endDate.slice(0, 10) : '');
+      setIsActive(subscription.status === 'Active');
     } else {
       resetForm();
     }
