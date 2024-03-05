@@ -11,162 +11,123 @@ import {
   FormLabel,
   Input,
   useToast,
-  Switch
-} from '@chakra-ui/react';
+  Switch,
+} from "@chakra-ui/react";
+import { generateToastConfig } from "../utils/toastUtils"; 
 
-const AddEditSubscriptionForm = ({ isOpen, onClose, subscription, refreshSubscriptions }) => {
-  const [name, setName] = useState('');
-  const [cost, setCost] = useState('');
-  const [billingDate, setBillingDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [isActive, setIsActive] = useState(true); 
+// Initial form 
+const initialFormState = {
+  name: "",
+  cost: 0, 
+  billingDate: "", 
+  endDate: "",
+  isActive: true, 
+};
+
+const AddEditSubscriptionForm = ({
+  isOpen,
+  onClose,
+  subscription,
+  refreshSubscriptions,
+}) => {
+  const [formData, setFormData] = useState(initialFormState);
   const toast = useToast();
 
   useEffect(() => {
-    if (subscription && isOpen) {
-      setName(subscription.name);
-      setCost(subscription.cost.toString());
-      setBillingDate(subscription.billingDate.slice(0, 10));
-      setEndDate(subscription.endDate ? subscription.endDate.slice(0, 10) : '');
-      setIsActive(subscription.status === 'Active');
-    } else {
-      resetForm();
-    }
+    setFormData(subscription && isOpen ? {
+      name: subscription.name || "",
+      cost: subscription.cost || 0,
+      billingDate: subscription.billingDate?.slice(0, 10) || "",
+      endDate: subscription.endDate?.slice(0, 10) || "",
+      isActive: subscription.status === "Active",status
+    } : initialFormState);
   }, [subscription, isOpen]);
 
-  const resetForm = () => {
-    setName('');
-    setCost('');
-    setBillingDate('');
-    setEndDate('');
-    setIsActive(true);
+  const handleChange = (e) => {
+    const { name, value, checked, type } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
   };
 
-  const handleDelete = () => {
-    if (subscription && subscription._id) {
-      fetch(`http://localhost:3000/subscriptions/${subscription._id}`, {
-        method: 'DELETE',
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(() => {
-        toast({
-          title: 'Subscription deleted.',
-          description: "The subscription has been successfully deleted.",
-          status: 'info',
-          duration: 5000,
-          isClosable: true,
-        });
-        onClose();
-        refreshSubscriptions();
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        toast({
-          title: 'An error occurred.',
-          description: "Unable to delete the subscription.",
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(subscription ? `http://localhost:3000/subscriptions/${subscription._id}` : 'http://localhost:3000/subscriptions', {
+        method: subscription ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          status: formData.isActive ? 'Active' : 'Suspended',
+          cost: Number(formData.cost), 
+        }),
       });
+
+      if (!response.ok) throw new Error('Network response was not ok');
+      
+      const data = await response.json();
+      toast(generateToastConfig(subscription ? 'updateSuccess' : 'addSuccess', data));
+      onClose(); 
+      refreshSubscriptions(); 
+    } catch (error) {
+      console.error('Error:', error);
+      toast(generateToastConfig("error", error));
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const url = subscription ? `http://localhost:3000/subscriptions/${subscription._id}` : 'http://localhost:3000/subscriptions';
-    const method = subscription ? 'PUT' : 'POST';
+  const handleDelete = async () => {
+    if (!subscription || !subscription._id) return;
 
-    fetch(url, {
-      method: method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        name, 
-        cost: parseFloat(cost), 
-        billingDate, 
-        endDate,
-        status: isActive ? 'Active' : 'Suspended'}),
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      toast({
-        title: subscription ? 'Subscription updated.' : 'Subscription added.',
-        description: `The subscription "${data.name}" has been successfully ${subscription ? 'updated' : 'added'}.`,
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      });
-      resetForm();
+    try {
+      const response = await fetch(`http://localhost:3000/subscriptions/${subscription._id}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Network response was not ok');
+      
+      toast(generateToastConfig('deleteSuccess'));
       onClose();
-      refreshSubscriptions(); 
-    })
-    .catch((error) => {
+      refreshSubscriptions();
+    } catch (error) {
       console.error('Error:', error);
-      toast({
-        title: 'An error occurred.',
-        description: error.toString(),
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    });
+      toast(generateToastConfig("error", error));
+    }
   };
-
+  
   return (
-    <Modal isOpen={isOpen} onClose={() => { onClose(); resetForm(); }}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{subscription ? 'Edit Subscription' : 'Add Subscription'}</ModalHeader>
         <form onSubmit={handleSubmit}>
-          <ModalBody>
-            <FormControl>
+          <ModalBody pb={6}>
+            {/* Form fields */}
+            <FormControl isRequired>
               <FormLabel>Name</FormLabel>
-              <Input value={name} onChange={(e) => setName(e.target.value)} />
+              <Input name="name" value={formData.name} onChange={handleChange} />
             </FormControl>
-            <FormControl mt={4}>
+            <FormControl mt={4} isRequired>
               <FormLabel>Cost</FormLabel>
-              <Input type="number" value={cost} onChange={(e) => setCost(e.target.value)} />
+              <Input name="cost" type="number" value={formData.cost.toString()} onChange={handleChange} />
             </FormControl>
-            <FormControl mt={4}>
+            <FormControl mt={4} isRequired>
               <FormLabel>Billing Date</FormLabel>
-              <Input type="date" value={billingDate} onChange={(e) => setBillingDate(e.target.value)} />
+              <Input name="billingDate" type="date" value={formData.billingDate} onChange={handleChange} />
             </FormControl>
             <FormControl mt={4}>
               <FormLabel>End Date</FormLabel>
-              <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+              <Input name="endDate" type="date" value={formData.endDate} onChange={handleChange} />
             </FormControl>
-            <FormControl display="flex" alignItems="center" mb={4}>
-              <FormLabel htmlFor="status-toggle" mb="6" mt={4}>
-                Suspend
-              </FormLabel>
-              <Switch id="status-toggle" isChecked={isActive} onChange={() => setIsActive(!isActive)}/>
-              <FormLabel ml={4} mt={1}>Active</FormLabel>
+            <FormControl mt={4} display="flex" alignItems="center">
+              <FormLabel htmlFor="isActive" mb="0">Suspend</FormLabel>
+              <Switch id="isActive" name="isActive" isChecked={formData.isActive} onChange={handleChange} mx={2}/>
+              <FormLabel mb="0">Active</FormLabel>
             </FormControl>
           </ModalBody>
           <ModalFooter>
             {subscription && (
-              <Button colorScheme="red" mr={3} onClick={handleDelete}>
-                Delete
-              </Button>
+              <Button colorScheme="red" mr={3} onClick={handleDelete}>Delete</Button>
             )}
-            <Button colorScheme="blue" mr={3} type="submit">
-              Save
-            </Button>
-            <Button variant="ghost" onClick={() => { onClose(); resetForm(); }}>
-              Cancel
-            </Button>
+            <Button colorScheme="blue" type="submit">Save</Button>
+            <Button variant="ghost" onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </form>
       </ModalContent>
