@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Box, Flex, Button, Text } from '@chakra-ui/react';
 import SubscriptionList from './SubscriptionList';
 import AddEditSubscriptionForm from './AddEditSubscriptionForm';
+import apiService from "../services/apiService";
 
 const Dashboard = ({ sortCriteria, filterCriteria }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -41,8 +42,7 @@ const Dashboard = ({ sortCriteria, filterCriteria }) => {
   // Fetch and refresh subscriptions
   const refreshSubscriptions = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:3000/subscriptions');
-      const data = await response.json();
+      const data = await apiService.fetchSubscriptions();
       applySortAndFilter(data);
     } catch (error) {
       console.error('Error fetching subscriptions:', error);

@@ -14,6 +14,7 @@ import {
   Switch,
 } from "@chakra-ui/react";
 import { generateToastConfig } from "../utils/toastUtils"; 
+import apiService from "../services/apiService";
 
 // Initial form 
 const initialFormState = {
@@ -52,45 +53,40 @@ const AddEditSubscriptionForm = ({
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(subscription ? `http://localhost:3000/subscriptions/${subscription._id}` : 'http://localhost:3000/subscriptions', {
-        method: subscription ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          status: formData.isActive ? 'Active' : 'Suspended',
-          cost: Number(formData.cost), 
-        }),
-      });
+  e.preventDefault();
+  try {
+    const subscriptionData = {
+      ...formData,
+      status: formData.isActive ? 'Active' : 'Suspended',
+      cost: Number(formData.cost),
+    };
+    
+    const data = subscription ? 
+      await apiService.updateSubscription(subscription._id, subscriptionData) : 
+      await apiService.addSubscription(subscriptionData);
+    
+    toast(generateToastConfig(subscription ? 'updateSuccess' : 'addSuccess', data));
+    onClose(); 
+    refreshSubscriptions(); 
+  } catch (error) {
+    console.error('Error:', error);
+    toast(generateToastConfig("error", error.toString()));
+  }
+};
 
-      if (!response.ok) throw new Error('Network response was not ok');
-      
-      const data = await response.json();
-      toast(generateToastConfig(subscription ? 'updateSuccess' : 'addSuccess', data));
-      onClose(); 
-      refreshSubscriptions(); 
-    } catch (error) {
-      console.error('Error:', error);
-      toast(generateToastConfig("error", error));
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!subscription || !subscription._id) return;
-
-    try {
-      const response = await fetch(`http://localhost:3000/subscriptions/${subscription._id}`, { method: 'DELETE' });
-      if (!response.ok) throw new Error('Network response was not ok');
-      
-      toast(generateToastConfig('deleteSuccess'));
-      onClose();
-      refreshSubscriptions();
-    } catch (error) {
-      console.error('Error:', error);
-      toast(generateToastConfig("error", error));
-    }
-  };
+const handleDelete = async () => {
+  if (!subscription || !subscription._id) return;
+  
+  try {
+    await apiService.deleteSubscription(subscription._id);
+    toast(generateToastConfig('deleteSuccess'));
+    onClose();
+    refreshSubscriptions();
+  } catch (error) {
+    console.error('Error:', error);
+    toast(generateToastConfig("error", error.toString()));
+  }
+};
   
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
