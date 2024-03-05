@@ -1,7 +1,14 @@
 import { Box, Flex, Button, Menu, MenuButton, MenuList, MenuItem, Text,} from '@chakra-ui/react';
 import { HamburgerIcon, TriangleDownIcon } from '@chakra-ui/icons';
 
-const Navbar = () => {
+const Navbar = ({ setSortCriteria, setFilterCriteria }) => {
+  const handleSortSelection = (criteria) => {
+    setSortCriteria(criteria);
+  };
+
+  const handleFilterSelection = (criteria) => {
+    setFilterCriteria(criteria);
+  };
   return (
       <Box
         bg="#ADC4CE"
@@ -22,10 +29,10 @@ const Navbar = () => {
             Sort
           </MenuButton>
           <MenuList>
-            <MenuItem>Alphabetic</MenuItem>
-            <MenuItem>Bill Date</MenuItem>
-            <MenuItem>Most Expensive</MenuItem>
-            <MenuItem>Cheapest</MenuItem>
+            <MenuItem onClick={() => handleSortSelection('alphabetical')}>Alphabetic</MenuItem>
+            <MenuItem onClick={() => handleSortSelection('billDate')}>Bill Date</MenuItem>
+            <MenuItem onClick={() => handleSortSelection('mostExpensive')}>Most Expensive</MenuItem>
+            <MenuItem onClick={() => handleSortSelection('cheapest')}>Cheapest</MenuItem>
           </MenuList>
         </Menu>
 
@@ -45,9 +52,9 @@ const Navbar = () => {
             Filter
           </MenuButton>
           <MenuList>
-            <MenuItem>All Subscriptions</MenuItem>
-            <MenuItem>Active Subscriptions</MenuItem>
-            <MenuItem>Suspended Subscriptions</MenuItem>
+            <MenuItem onClick={() => handleFilterSelection('all')}>All Subscriptions</MenuItem>
+            <MenuItem onClick={() => handleFilterSelection('active')}>Active Subscriptions</MenuItem>
+            <MenuItem onClick={() => handleFilterSelection('suspended')}>Suspended Subscriptions</MenuItem>
           </MenuList>
         </Menu>
       </Flex>

@@ -1,20 +1,14 @@
-import { ChakraProvider, CSSReset, extendTheme, GlobalStyle, Box } from '@chakra-ui/react';
+import { ChakraProvider, CSSReset, GlobalStyle, Box } from '@chakra-ui/react';
 import Dashboard from './components/Dashboard';
 import Navbar from './components/Navbar';
+import { useState } from 'react';
+import theme from './theme/theme'; 
 
-
-const theme = extendTheme({
-  styles: {
-    global: () => ({
-      body: {
-        bgGradient: 'linear(to-tr, #96B6C5, #ADC4CE, #EEE0C9, #F1F0E8)',
-        fontFamily: "'Poppins', sans-serif",
-      },
-    }),
-  },
-});
 
 function App() {
+  const [sortCriteria, setSortCriteria] = useState('');
+  const [filterCriteria, setFilterCriteria] = useState('all');
+
   return (
     <ChakraProvider theme={theme}>
       <CSSReset />
@@ -26,8 +20,8 @@ function App() {
         border="2px solid"
         borderColor="blue.300"
         borderRadius="xl">
-        <Navbar/>
-        <Dashboard />
+        <Navbar setSortCriteria={setSortCriteria} setFilterCriteria={setFilterCriteria}/>
+        <Dashboard sortCriteria={sortCriteria} filterCriteria={filterCriteria} />
       </Box>
     </ChakraProvider>
   );
