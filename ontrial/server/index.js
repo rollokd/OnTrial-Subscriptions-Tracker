@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('./scheduledTasks/subscriptionChecker')
 
 const express = require('express');
 const mongoose = require('mongoose');

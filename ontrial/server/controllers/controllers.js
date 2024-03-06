@@ -1,4 +1,5 @@
 const Subscription = require("../models/subscription")
+const Notification = require('../models/notification');
 
 const getSubs = async (req,res)=>{
  try {
@@ -50,4 +51,19 @@ const deleteSub = async (req, res) => {
   }
 };
 
-module.exports = {getSubs,addSub,editSub,deleteSub}
+const getNotification = async (req, res) => {
+  try {
+    const notifications = await Notification.find({ read: false }).sort({ date: -1 });
+    res.json(notifications);
+  } catch (error) {
+    res.status(500).send("Error fetching notifications.");
+  }
+};
+
+module.exports = {
+  getSubs,
+  addSub,
+  editSub,
+  deleteSub,
+  getNotification
+}
