@@ -16,7 +16,7 @@ This **OnTrial Subscription Tracker** enables users to effectively manage their 
 ```bash
 # Clone the repository
 git clone https://github.com/ByteBlink/OnTrial-Subscriptions-Tracker.git
-cd ontrial/server &
+cd ontrial/server 
 
 
 # Install dependencies
