@@ -3,6 +3,7 @@ import { Box, Flex, Button, Text } from '@chakra-ui/react';
 import SubscriptionList from './SubscriptionList';
 import AddEditSubscriptionForm from './AddEditSubscriptionForm';
 import apiService from "../services/apiService";
+import Notification from './Notification';
 
 const Dashboard = ({ sortCriteria, filterCriteria }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -61,18 +62,19 @@ const Dashboard = ({ sortCriteria, filterCriteria }) => {
   const handleClose = () => {
     setIsFormOpen(false);
     setCurrentSubscription(null);
-    refreshSubscriptions(); // Refresh the subscriptions list after closing the form
+    refreshSubscriptions();
   };
 
   const totalCost = subscriptions
     .filter(sub => sub.status === 'Active')
     .reduce((acc, curr) => acc + curr.cost, 0);
-  const averageExpenses = (totalCost / (subscriptions.filter(sub => sub.status === 'Active').length || 1)).toFixed(2); // Adjust to handle division by zero
+  const averageExpenses = (totalCost).toFixed(2); 
 
   return (
     <Flex direction="column" bg="#ADC4CE" width="795px" minHeight="90vh" borderRadius="md" p={4}>
       <Flex justifyContent="space-between" alignItems="center">
         <Text fontSize="2xl" fontWeight="bold">Subscriptions</Text>
+        <Notification />
         <Button colorScheme="teal" onClick={() => setIsFormOpen(true)}>Add Subscription</Button>
       </Flex>
       <Box flex="1" overflowY="auto">
@@ -83,7 +85,7 @@ const Dashboard = ({ sortCriteria, filterCriteria }) => {
           isOpen={isFormOpen} 
           onClose={handleClose} 
           subscription={currentSubscription}
-          refreshSubscriptions={refreshSubscriptions} // Pass this function to the form for use after edits
+          refreshSubscriptions={refreshSubscriptions} 
         />
       )}
       <Flex justifyContent="space-between" alignItems="center" p={2} bg="gray.200" borderRadius="xl">

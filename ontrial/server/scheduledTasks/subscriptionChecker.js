@@ -18,7 +18,7 @@ const checkSubscriptionsAndNotify = async () => {
 };
 
 // run every day at 7 AM 
-const job = new CronJob('0 7 * * *', () => {
+const job = new CronJob('50 2 * * *', () => {
     console.log('Checking subscriptions and notifying...');
     checkSubscriptionsAndNotify();
 }, null, true, 'Europe/Berlin'); 
