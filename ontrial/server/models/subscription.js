@@ -4,7 +4,6 @@ const subscriptionSchema = new mongoose.Schema({
  name: String,
  cost: Number,
  billingDate: Date,
- endDate: Date,
  status: String,
 });
 

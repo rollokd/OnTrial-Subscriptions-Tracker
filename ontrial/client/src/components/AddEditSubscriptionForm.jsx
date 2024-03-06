@@ -108,10 +108,6 @@ const handleDelete = async () => {
               <FormLabel>Billing Date</FormLabel>
               <Input name="billingDate" type="date" value={formData.billingDate} onChange={handleChange} />
             </FormControl>
-            <FormControl mt={4}>
-              <FormLabel>End Date</FormLabel>
-              <Input name="endDate" type="date" value={formData.endDate} onChange={handleChange} />
-            </FormControl>
             <FormControl mt={4} display="flex" alignItems="center">
               <FormLabel htmlFor="isActive" mb="0">Suspend</FormLabel>
               <Switch id="isActive" name="isActive" isChecked={formData.isActive} onChange={handleChange} mx={2}/>
