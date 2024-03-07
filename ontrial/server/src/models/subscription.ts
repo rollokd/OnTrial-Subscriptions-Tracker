@@ -1,18 +1,18 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-export type SUBSCRIPTION = {
-    name: string,
-    cost: number,
-    billingDate: Date,
-    status: string
+export interface SUBSCRIPTION {
+  name: string;
+  cost: number;
+  billingDate: Date;
+  status: string;
 }
 const subscriptionSchema = new Schema<SUBSCRIPTION>({
-    name: String,
-    cost: Number,
-    billingDate: Date,
-    status: String,
+  name: { type: String, required: true },
+  cost: { type: Number, required: true },
+  billingDate: { type: Date, required: true },
+  status: { type: String, required: true },
 });
 
-const Subscription = model('subscription', subscriptionSchema);
+const Subscription = model("subscription", subscriptionSchema);
 
 export default Subscription;
