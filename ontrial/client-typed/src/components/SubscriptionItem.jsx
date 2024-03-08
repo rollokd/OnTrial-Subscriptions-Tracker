@@ -13,7 +13,7 @@ const renewalText = calculateRenewalText(subscription.billingDate);
 
       <Spacer />
 
-      {/* Cost and Billig date info */}
+      {/* Cost and Billing date info */}
       <Flex direction="column" align="end">
         <Text fontSize="sm">${subscription.cost} / {subscription.billingCycle}</Text>
         <Text fontSize="sm" as="i">{renewalText}</Text>

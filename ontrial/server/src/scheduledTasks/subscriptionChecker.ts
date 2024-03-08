@@ -17,15 +17,17 @@ const checkSubscriptionsAndNotify = async () => {
     });
 };
 
+const hour = 19;
+const minute = 55;
 // run every day at 7 AM 
-const job = new CronJob('50 2 * * *', () => {
+const job = new CronJob('55 19 * * *', () => {
     console.log('Checking subscriptions and notifying...');
     checkSubscriptionsAndNotify();
-}, null, true, 'Europe/Berlin');
+}, null, true, 'Europe/London');
 
 job.start();
 
-console.log('Scheduled job started. It will check subscriptions daily at 7 AM Berlin time.');
+console.log('Scheduled job started. It will check subscriptions daily at 7:55 PM LONDON time.');
 
 
 export default checkSubscriptionsAndNotify;

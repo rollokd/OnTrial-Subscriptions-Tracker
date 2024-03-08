@@ -46,7 +46,7 @@ const Notification = () => {
         <Button onClick={() => setIsOpen(!isOpen)} variant="ghost">
           <BellIcon w={6} h={6} />
           {notifications.length > 0 && (
-            <Box as="span" ml={1} fontSize="sm" color="red.500">
+            <Box as="span" ml={1} fontSize="xl" color="red.500">
               {notifications.length}
             </Box>
           )}

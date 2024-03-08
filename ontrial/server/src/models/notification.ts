@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-interface NOTIFICATION {
+export interface NOTIFICATION {
   message: string;
   date: Date;
   read: boolean;
