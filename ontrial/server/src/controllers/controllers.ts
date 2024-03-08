@@ -4,11 +4,11 @@ import { Error, HydratedDocument } from "mongoose";
 import { Response, Request } from "express";
 
 function errorRes(message: string) {
-  return { errors: { message } }
+  return { errors: { message } };
 }
 
 function dataResponse(data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]) {
-  return { data: data }
+  return { data: data };
 }
 
 export const getSubs = async (req: Request, res: Response) => {
@@ -58,14 +58,21 @@ export const editSub = async (req: Request, res: Response) => {
       name: req.body.name,
       status: req.body.status,
     };
-    if (!sub.cost || !sub.billingDate || !sub.name || sub.status === undefined) {
+    if (
+      !sub.cost ||
+      !sub.billingDate ||
+      !sub.name ||
+      sub.status === undefined
+    ) {
       console.log("update failed due to missing values");
       return res.status(400).json(errorRes("missing values"));
     }
 
-    const subscription = await Subscription.findByIdAndUpdate(id, req.body, { new: true });
+    const subscription = await Subscription.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     if (!subscription) {
-      return res.status(404).send(errorRes('Subscription not found'));
+      return res.status(404).send(errorRes("Subscription not found"));
     }
     res.send(dataResponse(subscription));
   } catch (error) {
@@ -76,7 +83,7 @@ export const editSub = async (req: Request, res: Response) => {
 
 export const deleteSub = async (req: Request, res: Response) => {
   try {
-    if (!req.params.id) return res.status(400).json(errorRes('No id'));
+    if (!req.params.id) return res.status(400).json(errorRes("No id"));
     const deletedSubscription = await Subscription.findByIdAndDelete(
       req.params.id
     );
@@ -85,7 +92,7 @@ export const deleteSub = async (req: Request, res: Response) => {
     }
     res.send(dataResponse(deletedSubscription));
   } catch (error) {
-    res.status(500).send(errorRes('Deletion unsuccessful'));
+    res.status(500).send(errorRes("Deletion unsuccessful"));
     console.error("deletion error", error);
   }
 };

@@ -1,4 +1,4 @@
-import { differenceInDays, addMonths, isBefore } from 'date-fns';
+import { differenceInDays, addMonths, isBefore } from "date-fns";
 
 export const calculateRenewalText = (billingDateInput: string) => {
   const today = new Date();
@@ -13,8 +13,8 @@ export const calculateRenewalText = (billingDateInput: string) => {
   const daysLeft = differenceInDays(billingDate, today);
 
   if (daysLeft > 1) return `${daysLeft} days left`;
-  if (daysLeft === 1) return 'Renewal in 1 day';
-  if (daysLeft === 0) return 'Renewal today';
+  if (daysLeft === 1) return "Renewal in 1 day";
+  if (daysLeft === 0) return "Renewal today";
 
-  return 'Renewal date passed';
+  return "Renewal date passed";
 };

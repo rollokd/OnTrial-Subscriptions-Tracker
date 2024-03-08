@@ -2,35 +2,35 @@ import { UseToastOptions } from "@chakra-ui/react";
 
 export const generateToastConfig = (type: string, data?: string) => {
   switch (type) {
-    case 'deleteSuccess':
+    case "deleteSuccess":
       return {
-        title: 'Subscription deleted.',
+        title: "Subscription deleted.",
         description: "The subscription has been successfully deleted.",
-        status: 'info',
+        status: "info",
         duration: 3000,
         isClosable: true,
       } as UseToastOptions;
-    case 'addSuccess':
+    case "addSuccess":
       return {
-        title: 'Subscription added.',
+        title: "Subscription added.",
         description: `The subscription "${data}" has been successfully added.`,
-        status: 'success',
+        status: "success",
         duration: 3000,
         isClosable: true,
       } as UseToastOptions;
-    case 'updateSuccess':
+    case "updateSuccess":
       return {
-        title: 'Subscription updated.',
+        title: "Subscription updated.",
         description: `The subscription "${data}" has been successfully updated.`,
-        status: 'success',
+        status: "success",
         duration: 3000,
         isClosable: true,
       } as UseToastOptions;
-    case 'error':
+    case "error":
       return {
-        title: 'An error occurred.',
+        title: "An error occurred.",
         description: data || "Unable to process the request.",
-        status: 'error',
+        status: "error",
         duration: 3000,
         isClosable: true,
       } as UseToastOptions;

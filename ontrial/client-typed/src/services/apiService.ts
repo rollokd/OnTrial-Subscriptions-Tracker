@@ -12,7 +12,8 @@ type JSONResponse<T> = {
 export default {
   fetchSubscriptions: async (): Promise<Subscription[]> => {
     const response = await fetch(`${BASE_URL}/subscriptions`);
-    const { data, errors }: JSONResponse<Subscription[]> = await response.json();
+    const { data, errors }: JSONResponse<Subscription[]> =
+      await response.json();
     if (response.ok) {
       const subscription = data;
       if (subscription) {
@@ -59,16 +60,16 @@ export default {
     });
     const { data, errors }: JSONResponse<Subscription> = await response.json();
     if (response.ok) {
-      console.log('back from server', data)
+      console.log("back from server", data);
       const subscription = data;
       if (subscription) {
-        return subscription
+        return subscription;
       } else {
-        return Promise.reject(new Error("Unable to update subscription"))
+        return Promise.reject(new Error("Unable to update subscription"));
       }
     } else {
       const error = new Error(errors?.message);
-      return Promise.reject(error)
+      return Promise.reject(error);
     }
   },
 
@@ -80,31 +81,32 @@ export default {
     if (response.ok) {
       const subscription = data;
       if (subscription) {
-        return subscription
+        return subscription;
       } else {
-        return Promise.reject(new Error("Unable to delete subscription"))
+        return Promise.reject(new Error("Unable to delete subscription"));
       }
     } else {
       const error = new Error(errors?.message);
-      return Promise.reject(error)
+      return Promise.reject(error);
     }
   },
 
   fetchNotifications: async () => {
     const response = await fetch(`${BASE_URL}/notifications`);
 
-    const { data, errors }: JSONResponse<NOTIFICATION[]> = await response.json();
+    const { data, errors }: JSONResponse<NOTIFICATION[]> =
+      await response.json();
     console.log(data);
     if (response.ok) {
       const notification = data;
       if (notification) {
-        return notification
+        return notification;
       } else {
-        return Promise.reject(new Error("Unable to get notifications"))
+        return Promise.reject(new Error("Unable to get notifications"));
       }
     } else {
       const error = new Error(errors?.message);
-      return Promise.reject(error)
+      return Promise.reject(error);
     }
   },
 };

@@ -1,12 +1,12 @@
 import { Subscription } from "../utils/definitions";
 import SubscriptionItem from "./SubscriptionItem";
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex, Box } from "@chakra-ui/react";
 const SubscriptionList = ({
   onEdit,
-  subscriptions
+  subscriptions,
 }: {
-  onEdit: (x: Subscription) => void,
-  subscriptions: Subscription[]
+  onEdit: (x: Subscription) => void;
+  subscriptions: Subscription[];
 }) => {
   return (
     <Flex direction="column" align="center" w="full" py={2}>
@@ -17,32 +17,36 @@ const SubscriptionList = ({
         overflowY="hidden"
         _hover={{ overflowY: "auto" }}
         sx={{
-          '&::-webkit-scrollbar': {
-            width: '8px',
+          "&::-webkit-scrollbar": {
+            width: "8px",
           },
-          '&::-webkit-scrollbar-track': {
-            background: 'transparent',
+          "&::-webkit-scrollbar-track": {
+            background: "transparent",
           },
-          '&::-webkit-scrollbar-thumb': {
-            background: 'transparent',
-            borderRadius: '4px',
+          "&::-webkit-scrollbar-thumb": {
+            background: "transparent",
+            borderRadius: "4px",
           },
-          '&:hover::-webkit-scrollbar-thumb': {
-            background: '#888',
+          "&:hover::-webkit-scrollbar-thumb": {
+            background: "#888",
           },
-          '&::-webkit-scrollbar-thumb:hover': {
-            background: '#555',
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#555",
           },
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'transparent transparent',
-          '&:hover': {
-            scrollbarColor: '#888 #f0f0f0',
+          scrollbarWidth: "thin",
+          scrollbarColor: "transparent transparent",
+          "&:hover": {
+            scrollbarColor: "#888 #f0f0f0",
           },
         }}
       >
         {/* [sub1,sub2,sub3] */}
-        {subscriptions.map(subscription => (
-          <SubscriptionItem key={subscription._id} subscription={subscription} onEdit={() => onEdit(subscription)} />
+        {subscriptions.map((subscription) => (
+          <SubscriptionItem
+            key={subscription._id}
+            subscription={subscription}
+            onEdit={() => onEdit(subscription)}
+          />
         ))}
       </Box>
     </Flex>

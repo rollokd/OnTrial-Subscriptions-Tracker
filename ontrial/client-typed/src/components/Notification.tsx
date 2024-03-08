@@ -1,8 +1,19 @@
-import { useRef, useState, useEffect } from 'react';
-import { BellIcon } from '@chakra-ui/icons';
-import { Box, Button, List, ListItem, Popover, PopoverTrigger, PopoverContent, PopoverBody, useOutsideClick, Text } from '@chakra-ui/react';
-import apiService from '../services/apiService';
-import { NOTIFICATION } from '../utils/definitions';
+import { useRef, useState, useEffect } from "react";
+import { BellIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  List,
+  ListItem,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  useOutsideClick,
+  Text,
+} from "@chakra-ui/react";
+import apiService from "../services/apiService";
+import { NOTIFICATION } from "../utils/definitions";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState<NOTIFICATION[]>([]);
@@ -20,7 +31,7 @@ const Notification = () => {
         const notifications = await apiService.fetchNotifications();
         setNotifications(notifications);
       } catch (error) {
-        console.error('Error loading notifications:', error);
+        console.error("Error loading notifications:", error);
       }
     };
 
@@ -28,15 +39,15 @@ const Notification = () => {
   }, []);
 
   const renderMessage = (message: string) => {
-    const parts = message.split('for ')[1].split(' is due');
+    const parts = message.split("for ")[1].split(" is due");
     const subscriptionName = parts[0];
     return (
       <>
-        Your subscription for{' '}
+        Your subscription for{" "}
         <Text as="span" fontWeight="bold" fontSize="lg">
           {subscriptionName}
-        </Text>
-        {' '}is due tomorrow.
+        </Text>{" "}
+        is due tomorrow.
       </>
     );
   };
