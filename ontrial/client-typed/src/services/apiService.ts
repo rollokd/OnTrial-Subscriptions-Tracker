@@ -59,6 +59,7 @@ export default {
     });
     const { data, errors }: JSONResponse<Subscription> = await response.json();
     if (response.ok) {
+      console.log('back from server', data)
       const subscription = data;
       if (subscription) {
         return subscription
@@ -92,7 +93,7 @@ export default {
   fetchNotifications: async () => {
     const response = await fetch(`${BASE_URL}/notifications`);
 
-    const { data, errors }: JSONResponse<Notification[]> = await response.json();
+    const { data, errors }: JSONResponse<NOTIFICATION[]> = await response.json();
     console.log(data);
     if (response.ok) {
       const notification = data;

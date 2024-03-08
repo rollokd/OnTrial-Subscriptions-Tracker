@@ -4,13 +4,13 @@ export interface SUBSCRIPTION {
   name: string;
   cost: number;
   billingDate: Date;
-  status: string;
+  status: boolean;
 }
 const subscriptionSchema = new Schema<SUBSCRIPTION>({
   name: { type: String, required: true },
   cost: { type: Number, required: true },
   billingDate: { type: Date, required: true },
-  status: { type: String, required: true },
+  status: { type: Boolean, required: true },
 });
 
 const Subscription = model("subscription", subscriptionSchema);

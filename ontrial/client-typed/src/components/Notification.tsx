@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { BellIcon } from '@chakra-ui/icons';
 import { Box, Button, List, ListItem, Popover, PopoverTrigger, PopoverContent, PopoverBody, useOutsideClick, Text } from '@chakra-ui/react';
 import apiService from '../services/apiService';
+import { NOTIFICATION } from '../utils/definitions';
 
 const Notification = () => {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<NOTIFICATION[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const popoverRef = React.useRef();
+  const popoverRef = useRef(null);
 
   useOutsideClick({
     ref: popoverRef,
@@ -26,7 +27,7 @@ const Notification = () => {
     loadNotifications();
   }, []);
 
-  const renderMessage = (message) => {
+  const renderMessage = (message: string) => {
     const parts = message.split('for ')[1].split(' is due');
     const subscriptionName = parts[0];
     return (

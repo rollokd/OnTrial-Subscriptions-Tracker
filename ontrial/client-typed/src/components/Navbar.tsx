@@ -1,28 +1,35 @@
-import { Box, Flex, Button, Menu, MenuButton, MenuList, MenuItem, Text,} from '@chakra-ui/react';
+import { Box, Flex, Button, Menu, MenuButton, MenuList, MenuItem, Text, } from '@chakra-ui/react';
 import { HamburgerIcon, TriangleDownIcon } from '@chakra-ui/icons';
+import { Sorting, Filtering } from "../utils/definitions";
 
-const Navbar = ({ setSortCriteria, setFilterCriteria }) => {
-  const handleSortSelection = (criteria) => {
+const Navbar = ({
+  setSortCriteria,
+  setFilterCriteria
+}: {
+  setSortCriteria: React.Dispatch<React.SetStateAction<Sorting>>,
+  setFilterCriteria: React.Dispatch<React.SetStateAction<Filtering>>
+}) => {
+  const handleSortSelection = (criteria: Sorting) => {
     setSortCriteria(criteria);
   };
 
-  const handleFilterSelection = (criteria) => {
+  const handleFilterSelection = (criteria: Filtering) => {
     setFilterCriteria(criteria);
   };
   return (
-      <Box
-        bg="#ADC4CE"
-        px={{ base: 2, sm: 2, md: 4 }}
-        color='black'
-        w='795px'
-        borderRadius='lg'
-        mb={1}
-        position='relative'
-        textAlign="center"
-      >
-        <Flex 
+    <Box
+      bg="#ADC4CE"
+      px={{ base: 2, sm: 2, md: 4 }}
+      color='black'
+      w='795px'
+      borderRadius='lg'
+      mb={1}
+      position='relative'
+      textAlign="center"
+    >
+      <Flex
         justifyContent='space-between'
-        alignItems='center' 
+        alignItems='center'
         w='full'>
         <Menu>
           <MenuButton as={Button} leftIcon={<HamburgerIcon />} mr={4}>
@@ -38,12 +45,12 @@ const Navbar = ({ setSortCriteria, setFilterCriteria }) => {
 
         <Flex flexDirection="column" align="center">
           <Text fontSize="4xl" fontWeight="bold" fontFamily="'Poppins', sans-serif" color="teal"
-          as="i">
-          onTrial
+            as="i">
+            onTrial
           </Text>
           <Text fontSize="sm" color="gray.500" fontFamily="'Poppins', sans-serif"
-          as="i">
-          subscriptions tracker
+            as="i">
+            subscriptions tracker
           </Text>
         </Flex>
 

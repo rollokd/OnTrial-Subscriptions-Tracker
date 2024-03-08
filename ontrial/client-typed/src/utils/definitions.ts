@@ -1,13 +1,17 @@
 export type Subscription = {
-  _id: string;
+  _id?: string;
   name: string;
   cost: number;
-  billingDate: Date;
-  status: string;
-};
+  billingDate: string;
+  status: boolean;
+}
 
 export type NOTIFICATION = {
   message: string;
   date: Date;
   read: boolean;
+  _id?: string
 };
+
+export type Sorting = 'alphabetical' | 'billDate' | 'mostExpensive' | 'cheapest' | '';
+export type Filtering = 'all' | 'suspended' | 'active';

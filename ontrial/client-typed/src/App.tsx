@@ -3,10 +3,11 @@ import Dashboard from "./components/Dashboard";
 import Navbar from "./components/Navbar";
 import { useState } from "react";
 import theme from "./theme/theme";
+import { Sorting, Filtering } from "./utils/definitions";
 
 function App() {
-  const [sortCriteria, setSortCriteria] = useState("");
-  const [filterCriteria, setFilterCriteria] = useState("all");
+  const [sortCriteria, setSortCriteria] = useState<Sorting>("");
+  const [filterCriteria, setFilterCriteria] = useState<Filtering>("all");
 
   return (
     <ChakraProvider theme={theme}>

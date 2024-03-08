@@ -58,10 +58,11 @@ export const editSub = async (req: Request, res: Response) => {
       name: req.body.name,
       status: req.body.status,
     };
-    if (!sub.cost || !sub.billingDate || !sub.name || !sub.status) {
+    if (!sub.cost || !sub.billingDate || !sub.name || sub.status === undefined) {
       console.log("update failed due to missing values");
       return res.status(400).json(errorRes("missing values"));
     }
+
     const subscription = await Subscription.findByIdAndUpdate(id, req.body, { new: true });
     if (!subscription) {
       return res.status(404).send(errorRes('Subscription not found'));
