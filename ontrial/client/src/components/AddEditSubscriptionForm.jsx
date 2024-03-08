@@ -40,7 +40,7 @@ const AddEditSubscriptionForm = ({
       cost: subscription.cost || 0,
       billingDate: subscription.billingDate?.slice(0, 10) || "",
       endDate: subscription.endDate?.slice(0, 10) || "",
-      isActive: subscription.status === "Active",status
+      isActive: subscription.status === "Active"
     } : initialFormState);
   }, [subscription, isOpen]);
 
