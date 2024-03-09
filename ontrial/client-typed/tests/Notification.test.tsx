@@ -4,40 +4,6 @@ import apiService from "../src/services/apiService";
 import { NOTIFICATION } from "../src/utils/definitions";
 import userEvent from "@testing-library/user-event";
 
-// vi.mock("../src/services/apiService", async (importOriginal) => {
-//   const mod = await importOriginal<
-//     typeof import("../src/services/apiService")
-//   >();
-//   return {
-//     ...mod,
-//     // replace some exports
-//     // default: { },
-//     fetchNotifications: vi.fn(() => {
-//       console.log("tried to fetch notifications");
-//     }),
-//   };
-// });
-
-// globalThis.fetch = vi.fn();
-
-// function createFetchResponse(data) {
-//   return { json: () => new Promise((resolve) => resolve(data)) };
-// }
-
-// vi.mocked(apiService.fetchNotifications).mockReturnValue(
-//   Promise.resolve([
-//     {
-//       message: "Hello World",
-//       date: new Date("2024-03-07T19:58:00.030Z"),
-//       read: false,
-//     } as NOTIFICATION,
-//   ])
-// );
-
-beforeEach(() => {
-  // render(<Notification />);
-});
-
 afterEach(() => {
   vi.resetAllMocks();
 });
