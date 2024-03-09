@@ -29,7 +29,7 @@ const Notification = () => {
     const loadNotifications = async () => {
       try {
         const notifications = await apiService.fetchNotifications();
-        setNotifications(notifications);
+        if (Array.isArray(notifications)) setNotifications(notifications);
       } catch (error) {
         console.error("Error loading notifications:", error);
       }
@@ -39,8 +39,7 @@ const Notification = () => {
   }, []);
 
   const renderMessage = (message: string) => {
-    const parts = message.split("for ")[1].split(" is due");
-    const subscriptionName = parts[0];
+    const subscriptionName = message;
     return (
       <>
         Your subscription for{" "}
@@ -53,12 +52,18 @@ const Notification = () => {
   };
 
   return (
-    <Popover isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <Popover isOpen={isOpen} onClose={() => setIsOpen((prev) => !prev)}>
       <PopoverTrigger>
         <Button onClick={() => setIsOpen(!isOpen)} variant="ghost">
-          <BellIcon w={6} h={6} />
+          <BellIcon w={6} h={6} data-testid="bellIcon" />
           {notifications.length > 0 && (
-            <Box as="span" ml={1} fontSize="xl" color="red.500">
+            <Box
+              as="span"
+              ml={1}
+              fontSize="xl"
+              color="red.500"
+              data-testid="notifNumber"
+            >
               {notifications.length}
             </Box>
           )}

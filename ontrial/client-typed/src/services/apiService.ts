@@ -96,7 +96,7 @@ export default {
 
     const { data, errors }: JSONResponse<NOTIFICATION[]> =
       await response.json();
-    console.log(data);
+    // console.log(data);
     if (response.ok) {
       const notification = data;
       if (notification) {

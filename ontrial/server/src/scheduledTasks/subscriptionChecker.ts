@@ -1,5 +1,5 @@
 import { CronJob } from "cron";
-import { differenceInCalendarDays } from "date-fns";
+import { add, differenceInCalendarDays } from "date-fns";
 import Subscription from "../models/subscription";
 import addNotification from "../utils/notificationUtils";
 
@@ -11,8 +11,9 @@ const checkSubscriptionsAndNotify = async () => {
     const billingDate = new Date(subscription.billingDate);
 
     if (differenceInCalendarDays(billingDate, tomorrow) === 0) {
-      const message: string = `Your subscription for ${subscription.name} is due tomorrow.`;
-      await addNotification(message);
+      // const message: string = `Your subscription for ${subscription.name} is due tomorrow.`;
+      // await addNotification(message);
+      await addNotification(subscription.name);
     }
   });
 };
@@ -21,7 +22,7 @@ const hour = 19;
 const minute = 55;
 // run every day at 7 AM
 const job = new CronJob(
-  "55 19 * * *",
+  "34 11 * * *",
   () => {
     console.log("Checking subscriptions and notifying...");
     checkSubscriptionsAndNotify();

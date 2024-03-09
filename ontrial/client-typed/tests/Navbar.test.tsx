@@ -2,8 +2,8 @@ import Navbar from "../src/components/Navbar";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-const setFilter = vi.fn(() => { });
-const setSorting = vi.fn(() => { });
+const setFilter = vi.fn(() => {});
+const setSorting = vi.fn(() => {});
 
 beforeEach(async () => {
   render(<Navbar setFilterCriteria={setFilter} setSortCriteria={setSorting} />);
@@ -36,11 +36,10 @@ describe("Navbar", () => {
     await userEvent.click(sortButton);
     const menuButtons = screen.getAllByRole("menuitem");
     expect(menuButtons.length).toBe(3);
-    screen.debug()
   });
   it("buttons can be pressed after sort button activates dropdown menu", async () => {
     const sortBtn = screen.getByRole("button", { name: "Sort" });
-    await userEvent.click(sortBtn)
+    await userEvent.click(sortBtn);
 
     const billDateBtn = screen.getByRole("menuitem", { name: "Bill Date" });
     await userEvent.click(billDateBtn);
@@ -54,17 +53,21 @@ describe("Navbar", () => {
   });
   it("buttons can be pressed after filter button activates dropdown menu", async () => {
     const filterBtn = screen.getByRole("button", { name: "Filter" });
-    await userEvent.click(filterBtn)
+    await userEvent.click(filterBtn);
 
-    const activeBtn = screen.getByRole("menuitem", { name: "Active Subscriptions" });
+    const activeBtn = screen.getByRole("menuitem", {
+      name: "Active Subscriptions",
+    });
     await userEvent.click(activeBtn);
-    const allSubBtn = screen.getByRole("menuitem", { name: "All Subscriptions" });
+    const allSubBtn = screen.getByRole("menuitem", {
+      name: "All Subscriptions",
+    });
     await userEvent.click(allSubBtn);
-    const suspendBtn = screen.getByRole("menuitem", { name: "Suspended Subscriptions" });
+    const suspendBtn = screen.getByRole("menuitem", {
+      name: "Suspended Subscriptions",
+    });
     await userEvent.click(suspendBtn);
 
     expect(setFilter).toBeCalledTimes(3);
   });
-
-
 });
