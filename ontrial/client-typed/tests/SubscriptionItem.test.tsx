@@ -15,7 +15,7 @@ beforeEach(() => {
     vi.clearAllMocks()
 })
 
-describe.only("SubscriptionItem testing", () => {
+describe("SubscriptionItem testing", () => {
     it("testing subscription name render", () => {
         const textValue = screen.getByText("somethingCrazy");
         expect(textValue).toBeInTheDocument();

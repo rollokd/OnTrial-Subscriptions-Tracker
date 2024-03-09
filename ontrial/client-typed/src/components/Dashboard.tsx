@@ -65,7 +65,7 @@ const Dashboard = ({
   const refreshSubscriptions = useCallback(async () => {
     try {
       const data = await apiService.fetchSubscriptions();
-      console.log("fetch subs:", data);
+      // console.log("fetch subs:", data);
       applySortAndFilter(data);
     } catch (error) {
       console.error("Error fetching subscriptions:", error);
