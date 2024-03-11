@@ -2,8 +2,8 @@ import Navbar from "../src/components/Navbar";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-const setFilter = vi.fn(() => {});
-const setSorting = vi.fn(() => {});
+const setFilter = vi.fn(() => { });
+const setSorting = vi.fn(() => { });
 
 beforeEach(async () => {
   render(<Navbar setFilterCriteria={setFilter} setSortCriteria={setSorting} />);
