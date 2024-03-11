@@ -27,11 +27,13 @@ const initialFormState = {
 };
 
 const AddEditSubscriptionForm = ({
+  testId,
   isOpen,
   onClose,
   subscription,
   refreshSubscriptions,
 }: {
+  testId: string,
   isOpen: boolean;
   onClose: () => void;
   subscription: Subscription | null;
@@ -118,7 +120,7 @@ const AddEditSubscriptionForm = ({
         <ModalHeader>
           {subscription ? "Edit Subscription" : "Add Subscription"}{" "}
         </ModalHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} data-testId={testId}>
           <ModalBody pb={6}>
             {/* Form fields */}
             <FormControl isRequired>
