@@ -12,8 +12,10 @@ type JSONResponse<T> = {
 export default {
   fetchSubscriptions: async (): Promise<Subscription[]> => {
     const response = await fetch(`${BASE_URL}/subscriptions`);
+    console.log(response);
     const { data, errors }: JSONResponse<Subscription[]> =
       await response.json();
+    console.log("output errors:", errors);
     if (response.ok) {
       const subscription = data;
       if (subscription) {
@@ -22,6 +24,7 @@ export default {
         return Promise.reject(new Error("Unable to fetch subscriptions"));
       }
     } else {
+      console.log("errors", errors);
       const error = new Error(errors?.message);
       return Promise.reject(error);
     }

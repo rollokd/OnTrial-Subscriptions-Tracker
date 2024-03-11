@@ -33,7 +33,7 @@ const AddEditSubscriptionForm = ({
   subscription,
   refreshSubscriptions,
 }: {
-  testId: string,
+  testId: string;
   isOpen: boolean;
   onClose: () => void;
   subscription: Subscription | null;
@@ -46,12 +46,12 @@ const AddEditSubscriptionForm = ({
     setFormData(
       subscription && isOpen
         ? {
-          name: subscription.name.trim() || "",
-          cost: subscription.cost || 0,
-          billingDate: subscription.billingDate?.slice(0, 10) || "",
-          // endDate: subscription.endDate?.slice(0, 10) || "", TODO: add endData implementation
-          status: subscription.status,
-        }
+            name: subscription.name.trim() || "",
+            cost: subscription.cost || 0,
+            billingDate: subscription.billingDate?.slice(0, 10) || "",
+            // endDate: subscription.endDate?.slice(0, 10) || "", TODO: add endData implementation
+            status: subscription.status,
+          }
         : initialFormState
     );
   }, [subscription, isOpen]);
@@ -77,10 +77,10 @@ const AddEditSubscriptionForm = ({
       const data =
         subscription && subscription._id
           ? // TODO: check subscription prop type for null
-          await apiService.updateSubscription(
-            subscription._id,
-            subscriptionData
-          )
+            await apiService.updateSubscription(
+              subscription._id,
+              subscriptionData
+            )
           : await apiService.addSubscription(subscriptionData);
 
       toast(
@@ -120,7 +120,7 @@ const AddEditSubscriptionForm = ({
         <ModalHeader>
           {subscription ? "Edit Subscription" : "Add Subscription"}{" "}
         </ModalHeader>
-        <form onSubmit={handleSubmit} data-testId={testId}>
+        <form onSubmit={handleSubmit} data-testid={testId}>
           <ModalBody pb={6}>
             {/* Form fields */}
             <FormControl isRequired>
