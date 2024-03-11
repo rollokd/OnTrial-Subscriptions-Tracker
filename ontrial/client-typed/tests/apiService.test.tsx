@@ -90,3 +90,44 @@ describe("adding subsciptions", () => {
     expect(fetchMocker).toHaveBeenCalled();
   });
 });
+
+describe.only("Updating Subscription", () => {
+  it("should correctly send an update", async () => {
+    fetchMocker.mockResponse(async (req) => {
+      expect(req.method).toBe("PUT");
+      expect(req.url.endsWith("123")).toBe(true);
+      const body = await req.json();
+      return {
+        status: 200,
+        body: JSON.stringify({ data: body }),
+      };
+    });
+    const data = {
+      name: "bla bla bla squared",
+      billingDate: "2025-04-13T00:00:00.000Z",
+      cost: 12,
+      status: true,
+    };
+    const response = await apiService.updateSubscription("123", data);
+    expect(response).toEqual(data);
+  });
+  it("if sending an update fails should return an error", () => {
+    fetchMocker.mockResponse((req) => {
+      expect(req.method).toBe("PUT");
+      expect(req.url.endsWith("123")).toBe(true);
+      return {
+        status: 500,
+        body: JSON.stringify({ errors: { message: "testing" } }),
+      };
+    });
+    const data = {
+      name: "bla bla bla squared",
+      billingDate: "2025-04-13T00:00:00.000Z",
+      cost: 12,
+      status: true,
+    };
+    expect(() =>
+      apiService.updateSubscription("123", data)
+    ).rejects.toThrowError("testing");
+  });
+});
