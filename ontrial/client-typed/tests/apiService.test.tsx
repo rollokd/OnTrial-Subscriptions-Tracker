@@ -21,6 +21,20 @@ const subsMock = [
     status: true,
   },
 ];
+const notifsMock = [
+  {
+    _id: "125",
+    messge: "bla bla",
+    date: "2024-03-12T00:00:00.000Z",
+    read: false,
+  },
+  {
+    _id: "126",
+    messge: "bla bla bla",
+    date: "2024-04-13T00:00:00.000Z",
+    read: false,
+  },
+];
 
 beforeEach(() => {
   fetchMocker.resetMocks();
@@ -64,6 +78,7 @@ describe("adding subsciptions", () => {
   });
 
   it("Should return an error if it could not be added", () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, ...input } = subsMock[0];
     fetchMocker.mockResponse(async (req) => {
       expect(req.method).toBe("POST");
@@ -79,6 +94,7 @@ describe("adding subsciptions", () => {
   });
 
   it("should throw an error if no subscription is returned with a 200 code", () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, ...input } = subsMock[0];
     fetchMocker.mockResponse(async (req) => {
       expect(req.method).toBe("POST");
@@ -91,7 +107,7 @@ describe("adding subsciptions", () => {
   });
 });
 
-describe.only("Updating Subscription", () => {
+describe("Updating Subscription", () => {
   it("should correctly send an update", async () => {
     fetchMocker.mockResponse(async (req) => {
       expect(req.method).toBe("PUT");
@@ -129,5 +145,29 @@ describe.only("Updating Subscription", () => {
     expect(() =>
       apiService.updateSubscription("123", data)
     ).rejects.toThrowError("testing");
+  });
+});
+
+describe("Fetch Notification", () => {
+  it("should correctly fetch notifications", async () => {
+    fetchMocker.mockResponse((req) => {
+      expect(req.method).toBe("GET");
+      return JSON.stringify({ data: notifsMock });
+    });
+    const response = await apiService.fetchNotifications();
+    expect(fetchMocker).toHaveBeenCalledOnce();
+    expect(response).toEqual(notifsMock);
+  });
+  it("should handle error responses", () => {
+    fetchMocker.mockResponse((req) => {
+      expect(req.method).toBe("GET");
+      return {
+        status: 500,
+        body: JSON.stringify({ errors: { message: "The backend failed" } }),
+      };
+    });
+    expect(() => apiService.fetchNotifications()).rejects.toThrowError(
+      "The backend failed"
+    );
   });
 });
