@@ -131,3 +131,32 @@ describe.only("Updating Subscription", () => {
     ).rejects.toThrowError("testing");
   });
 });
+
+describe.only("Deleting Subscription", () => {
+  it("should correctly send a delete", async () => {
+    fetchMocker.mockResponse(async (req) => {
+      expect(req.method).toBe("DELETE");
+      expect(req.url.endsWith("123")).toBe(true)
+      return {
+        status: 200,
+        body: JSON.stringify({ data: data })
+      };
+    });
+    const data = subsMock[1];
+    const response = await apiService.deleteSubscription(data._id);
+    expect(response).toEqual(data);
+  })
+  it("should throw an error if delete request fails", () => {
+    fetchMocker.mockResponse((req) => {
+      expect(req.method).toBe("DELETE");
+      expect(req.url.endsWith("123")).toBe(true);
+      return {
+        status: 500,
+        body: JSON.stringify({ errors: { message: "testing" } }),
+      };
+    });
+    expect(() =>
+      apiService.deleteSubscription("123")
+    ).rejects.toThrowError("testing");
+  })
+})
