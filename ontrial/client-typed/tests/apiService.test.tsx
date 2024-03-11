@@ -48,3 +48,45 @@ describe("Fetching Subscriptions", () => {
     expect(() => apiService.fetchSubscriptions()).rejects.toThrowError();
   });
 });
+
+describe("adding subsciptions", () => {
+  it("should return a valid subscription that was added", async () => {
+    const { _id, ...input } = subsMock[0];
+    fetchMocker.mockResponse(async (req) => {
+      expect(req.method).toBe("POST");
+      const body = await req.json();
+      body._id = _id;
+      return JSON.stringify({ data: body });
+    });
+    const response = await apiService.addSubscription(input);
+    expect(fetchMocker).toHaveBeenCalled();
+    expect(response).toEqual(subsMock[0]);
+  });
+
+  it("Should return an error if it could not be added", () => {
+    const { _id, ...input } = subsMock[0];
+    fetchMocker.mockResponse(async (req) => {
+      expect(req.method).toBe("POST");
+      return {
+        status: 400,
+        body: JSON.stringify({ errors: { message: "missing values" } }),
+      };
+    });
+    expect(() => apiService.addSubscription(input)).rejects.toThrowError(
+      "missing values"
+    );
+    expect(fetchMocker).toHaveBeenCalled();
+  });
+
+  it("should throw an error if no subscription is returned with a 200 code", () => {
+    const { _id, ...input } = subsMock[0];
+    fetchMocker.mockResponse(async (req) => {
+      expect(req.method).toBe("POST");
+      return JSON.stringify({ data: undefined });
+    });
+    expect(() => apiService.addSubscription(input)).rejects.toThrowError(
+      "Unable to verify subscription was added"
+    );
+    expect(fetchMocker).toHaveBeenCalled();
+  });
+});
