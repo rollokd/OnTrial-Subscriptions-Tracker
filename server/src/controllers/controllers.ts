@@ -1,109 +1,121 @@
-import Subscription, { SUBSCRIPTION } from "../models/subscription";
-import Notification, { NOTIFICATION } from "../models/notification";
-import { Error, HydratedDocument } from "mongoose";
-import { Response, Request } from "express";
+import Subscription, { type SUBSCRIPTION } from '../models/subscription'
+import Notification, { type NOTIFICATION } from '../models/notification'
+import { Error, type HydratedDocument } from 'mongoose'
+import { type Response, type Request } from 'express'
+import asyncHandler from 'express-async-handler'
 
-function errorRes(message: string) {
-  return { errors: { message } };
+interface ErrorType {
+  errors: {
+    message: string
+  }
+}
+interface DataType {
+  data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]
+}
+function errorRes (message: string): ErrorType {
+  return { errors: { message } }
 }
 
-function dataResponse(data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]) {
-  return { data: data };
+function dataResponse (data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]): DataType {
+  return { data }
 }
 
-export const getSubs = async (req: Request, res: Response) => {
+export const getSubs = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   try {
-    const subscriptions = await Subscription.find();
-    res.send(dataResponse(subscriptions));
+    const subscriptions = await Subscription.find()
+    res.send(dataResponse(subscriptions))
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).send({
-        errors: { message: "There was an error fetching the subscriptions" },
-      });
-      console.error("Error fetching subscriptions:", error);
+        errors: { message: 'There was an error fetching the subscriptions' }
+      })
+      console.error('Error fetching subscriptions:', error)
     }
   }
-};
-
-export const addSub = async (req: Request, res: Response) => {
+}
+)
+export const addSub = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   try {
     const sub: SUBSCRIPTION = {
       cost: req.body.cost,
       billingDate: req.body.billingDate,
       name: req.body.name,
-      status: req.body.status,
-    };
-    if (!sub.cost || !sub.billingDate || !sub.name || !sub.status) {
-      console.log("update failed due to missing values");
-      return res.status(400).json({ errors: { message: "missing values" } });
+      status: req.body.status
     }
-    const subscription: HydratedDocument<SUBSCRIPTION> = new Subscription(sub);
-    await subscription.save();
-    res.send(dataResponse(subscription));
+    if (sub.cost === undefined || sub.billingDate === undefined || sub.name === '' || sub.name === undefined || sub.status === undefined) {
+      console.log('update failed due to missing values')
+      res.status(400).json({ errors: { message: 'missing values' } })
+    }
+    const subscription: HydratedDocument<SUBSCRIPTION> = new Subscription(sub)
+    await subscription.save()
+    res.send(dataResponse(subscription))
   } catch (error) {
     res.status(500).send({
-      errors: { message: "An error occurred while adding the subscription." },
-    });
-    console.error("Error adding subscription:", error);
+      errors: { message: 'An error occurred while adding the subscription.' }
+    })
+    console.error('Error adding subscription:', error)
   }
-};
+})
 
-export const editSub = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  console.log(`Updating subscription with ID: ${id}`); // Debugging log
+export const editSub = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params
+  console.log(`Updating subscription with ID: ${id}`) // Debugging log
   try {
     const sub: SUBSCRIPTION = {
       cost: req.body.cost,
       billingDate: req.body.billingDate,
       name: req.body.name,
-      status: req.body.status,
-    };
+      status: req.body.status
+    }
     if (
-      !sub.cost ||
-      !sub.billingDate ||
-      !sub.name ||
+      sub.cost === undefined ||
+      sub.billingDate === undefined ||
+      sub.name === '' || sub.name === undefined ||
       sub.status === undefined
     ) {
-      console.log("update failed due to missing values");
-      return res.status(400).json(errorRes("missing values"));
+      console.log('update failed due to missing values')
+      res.status(400).json(errorRes('missing values'))
     }
 
-    const subscription = await Subscription.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    if (!subscription) {
-      return res.status(404).send(errorRes("Subscription not found"));
+    const subscription = await Subscription.findByIdAndUpdate(id, sub, {
+      new: true
+    })
+    if (subscription === null) {
+      res.status(404).send(errorRes('Subscription not found'))
+    } else {
+      res.send(dataResponse(subscription))
     }
-    res.send(dataResponse(subscription));
   } catch (error) {
-    res.status(500).send(errorRes("Unable to update."));
-    console.error("Error updating subscription:", error);
+    res.status(500).send(errorRes('Unable to update.'))
+    console.error('Error updating subscription:', error)
   }
-};
+})
 
-export const deleteSub = async (req: Request, res: Response) => {
+export const deleteSub = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!req.params.id) return res.status(400).json(errorRes("No id"));
+    if (req.params.id === undefined) res.status(400).json(errorRes('No id'))
     const deletedSubscription = await Subscription.findByIdAndDelete(
       req.params.id
-    );
-    if (!deletedSubscription) {
-      return res.status(404).send("Subscription not found");
+    )
+    if (deletedSubscription === undefined || deletedSubscription === null) {
+      res.status(404).send('Subscription not found')
+    } else {
+      res.send(dataResponse(deletedSubscription))
     }
-    res.send(dataResponse(deletedSubscription));
   } catch (error) {
-    res.status(500).send(errorRes("Deletion unsuccessful"));
-    console.error("deletion error", error);
+    res.status(500).send(errorRes('Deletion unsuccessful'))
+    console.error('deletion error', error)
   }
-};
+})
 
-export const getNotification = async (req: Request, res: Response) => {
+export const getNotification = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   try {
     const notifications = await Notification.find({ read: false }).sort({
-      date: -1,
-    });
-    res.json(dataResponse(notifications));
+      date: -1
+    })
+    res.json(dataResponse(notifications))
   } catch (error) {
-    res.status(500).send(errorRes("Error fetching notifications."));
+    res.status(500).send(errorRes('Error fetching notifications.'))
   }
-};
+}
+)

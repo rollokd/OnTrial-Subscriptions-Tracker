@@ -1,12 +1,12 @@
-import Notification from "../models/notification";
+import Notification from '../models/notification'
 
-const addNotification = async (message: string) => {
+const addNotification = async (message: string): Promise<void> => {
   try {
-    const notification = new Notification({ message });
-    await notification.save();
+    const notification = new Notification({ message })
+    await notification.save()
   } catch (error) {
-    console.error("Failed to add notification:", error);
+    console.error('Failed to add notification:', error)
   }
-};
+}
 
-export default addNotification;
+export default addNotification

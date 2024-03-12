@@ -1,16 +1,16 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose'
 
 export interface NOTIFICATION {
-  message: string;
-  date: Date;
-  read: boolean;
+  message: string
+  date: Date
+  read: boolean
 }
 const notificationSchema = new Schema<NOTIFICATION>({
   message: { type: String, required: true },
   date: { type: Date, default: Date.now },
-  read: { type: Boolean, default: false },
-});
+  read: { type: Boolean, default: false }
+})
 
-const Notification = model("Notification", notificationSchema);
+const Notification = model<NOTIFICATION>('Notification', notificationSchema)
 
-export default Notification;
+export default Notification

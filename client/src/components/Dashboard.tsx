@@ -115,7 +115,6 @@ const Dashboard = ({
       </Box>
       {isFormOpen && (
         <AddEditSubscriptionForm
-          testId="add-edit-form"
           isOpen={isFormOpen}
           onClose={handleClose}
           subscription={currentSubscription}

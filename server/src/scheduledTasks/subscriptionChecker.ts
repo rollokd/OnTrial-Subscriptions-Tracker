@@ -1,41 +1,39 @@
-import { CronJob } from "cron";
-import { add, differenceInCalendarDays } from "date-fns";
-import Subscription from "../models/subscription";
-import addNotification from "../utils/notificationUtils";
+import { CronJob } from 'cron'
+import { differenceInCalendarDays } from 'date-fns'
+import Subscription from '../models/subscription'
+import addNotification from '../utils/notificationUtils'
 
-const checkSubscriptionsAndNotify = async () => {
-  const subscriptions = await Subscription.find();
-  const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1));
+const checkSubscriptionsAndNotify = async (): Promise<void> => {
+  const subscriptions = await Subscription.find()
+  const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
 
-  subscriptions.forEach(async (subscription) => {
-    const billingDate = new Date(subscription.billingDate);
+  await Promise.all(subscriptions.map(async (subscription) => {
+    const billingDate = new Date(subscription.billingDate)
 
     if (differenceInCalendarDays(billingDate, tomorrow) === 0) {
-      // const message: string = `Your subscription for ${subscription.name} is due tomorrow.`;
-      // await addNotification(message);
-      await addNotification(subscription.name);
+      await addNotification(subscription.name)
     }
-  });
-};
+  }))
+}
 
-const hour = 19;
-const minute = 55;
+const hour = 19
+const minute = 55
 // run every day at 7 AM
 const job = new CronJob(
-  "34 11 * * *",
-  () => {
-    console.log("Checking subscriptions and notifying...");
-    checkSubscriptionsAndNotify();
+  `${minute} ${hour} * * *`,
+  async () => {
+    console.log('Checking subscriptions and notifying...')
+    await checkSubscriptionsAndNotify()
   },
   null,
   true,
-  "Europe/London"
-);
+  'Europe/London'
+)
 
-job.start();
+job.start()
 
 console.log(
-  "Scheduled job started. It will check subscriptions daily at 7:55 PM LONDON time."
-);
+  'Scheduled job started. It will check subscriptions daily at 7:55 PM LONDON time.'
+)
 
-export default checkSubscriptionsAndNotify;
+export default checkSubscriptionsAndNotify
