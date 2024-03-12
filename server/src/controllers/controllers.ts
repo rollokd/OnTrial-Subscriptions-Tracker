@@ -1,7 +1,7 @@
 import Subscription, { type SUBSCRIPTION } from '../models/subscription'
 import Notification, { type NOTIFICATION } from '../models/notification'
 import { Error, type HydratedDocument } from 'mongoose'
-import { type Response, type Request } from 'express'
+import { type Response, type Request, type NextFunction } from 'express'
 import asyncHandler from 'express-async-handler'
 
 interface ErrorType {
@@ -12,29 +12,41 @@ interface ErrorType {
 interface DataType {
   data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]
 }
-function errorRes (message: string): ErrorType {
+function errorRes(message: string): ErrorType {
   return { errors: { message } }
 }
 
-function dataResponse (data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]): DataType {
+function dataResponse(data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]): DataType {
   return { data }
 }
 
-export const getSubs = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+export const getSubs = async (req: Request, res: Response): Promise<void> => {
   try {
     const subscriptions = await Subscription.find()
     res.send(dataResponse(subscriptions))
   } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).send({
-        errors: { message: 'There was an error fetching the subscriptions' }
-      })
-      console.error('Error fetching subscriptions:', error)
-    }
+    res.status(500).send({
+      errors: { message: 'There was an error fetching the subscriptions' }
+    })
+    console.error('Error fetching subscriptions:', error)
   }
 }
-)
-export const addSub = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+// export const getSubs = (req: Request, res: Response): void => {
+//   Subscription.find()
+//     .then((subscriptions) =>
+//       res.send(dataResponse(subscriptions))
+//     )
+//     .catch((err) => {
+//       if (err instanceof Error) {
+//         res.status(500).send({
+//           errors: { message: 'There was an error fetching the subscriptions' }
+//         })
+//         console.error('Error fetching subscriptions:', err)
+//       }
+//     })
+// }
+
+export const addSub = async (req: Request, res: Response): Promise<void> => {
   try {
     const sub: SUBSCRIPTION = {
       cost: req.body.cost,
@@ -45,17 +57,18 @@ export const addSub = asyncHandler(async (req: Request, res: Response): Promise<
     if (sub.cost === undefined || sub.billingDate === undefined || sub.name === '' || sub.name === undefined || sub.status === undefined) {
       console.log('update failed due to missing values')
       res.status(400).json({ errors: { message: 'missing values' } })
+    } else {
+      const subscription: HydratedDocument<SUBSCRIPTION> = new Subscription(sub)
+      await subscription.save()
+      res.send(dataResponse(subscription))
     }
-    const subscription: HydratedDocument<SUBSCRIPTION> = new Subscription(sub)
-    await subscription.save()
-    res.send(dataResponse(subscription))
   } catch (error) {
     res.status(500).send({
       errors: { message: 'An error occurred while adding the subscription.' }
     })
     console.error('Error adding subscription:', error)
   }
-})
+}
 
 export const editSub = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params
@@ -70,7 +83,8 @@ export const editSub = asyncHandler(async (req: Request, res: Response): Promise
     if (
       sub.cost === undefined ||
       sub.billingDate === undefined ||
-      sub.name === '' || sub.name === undefined ||
+      sub.name === '' ||
+      sub.name === undefined ||
       sub.status === undefined
     ) {
       console.log('update failed due to missing values')
@@ -81,6 +95,7 @@ export const editSub = asyncHandler(async (req: Request, res: Response): Promise
       new: true
     })
     if (subscription === null) {
+      console.log('no sub found')
       res.status(404).send(errorRes('Subscription not found'))
     } else {
       res.send(dataResponse(subscription))

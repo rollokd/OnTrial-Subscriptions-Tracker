@@ -14,15 +14,18 @@ module.exports = {
       ],
       parserOptions: {
         sourceType: 'script'
+
       }
     }
   ],
   parserOptions: {
+    // project: 'tsconfig.json',
+    // tsconfigRootDir: __dirname,
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
   rules: {
     '@typescript-eslint/no-misused-promises': 0
   },
-  ignorePatterns: ['dist/**/*']
+  ignorePatterns: ['dist/**/*', 'babel.config.cjs', 'jest.config.ts']
 }

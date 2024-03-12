@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose'
 
 export interface NOTIFICATION {
+  _id?: Types.ObjectId
   message: string
   date: Date
   read: boolean

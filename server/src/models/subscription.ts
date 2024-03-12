@@ -1,6 +1,7 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, type Types } from 'mongoose'
 
 export interface SUBSCRIPTION {
+  _id?: Types.ObjectId
   name: string
   cost: number
   billingDate: Date
