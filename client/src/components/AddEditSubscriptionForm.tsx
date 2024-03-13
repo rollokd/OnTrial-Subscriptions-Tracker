@@ -40,8 +40,6 @@ const AddEditSubscriptionForm = ({
   const [formData, setFormData] = useState<Subscription>(initialFormState);
   const toast = useToast();
 
-  console.log("incoming", subscription);
-
   useEffect(() => {
     setFormData(
       subscription && isOpen
@@ -120,49 +118,56 @@ const AddEditSubscriptionForm = ({
   const min = `${year}-${month < 10 ? "0" + month : month}-${day}`;
   const max = `${year}-${month < 10 ? "0" + (month + 1) : month}-${day}`;
 
+  function getInputType(key: string) {
+    switch (key) {
+      case "name":
+        return "text";
+      case "cost":
+        return "number";
+      case "billingDate":
+        return "date";
+      case "status":
+        return;
+    }
+  }
+
+  function toCapitalCase(input: string) {
+    const result = input.replace(/([A-Z])/g, " $1");
+    return input.charAt(0).toUpperCase() + result.slice(1);
+  }
+
+  const formInputs = [];
+  for (const [key, value] of Object.entries(formData)) {
+    if (key === "_id" || key === "status") continue;
+    formInputs.push(
+      <FormControl key={key} mt={key !== "name" ? 4 : 0} isRequired>
+        <FormLabel>{toCapitalCase(key)}</FormLabel>
+        <Input
+          name={key}
+          type={getInputType(key)}
+          value={value.toString()}
+          onChange={handleChange}
+          min={min}
+          max={max}
+        />
+      </FormControl>
+    );
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          {subscription ? "Edit Subscription" : "Add Subscription"}{" "}
+          {subscription ? "Edit Subscription" : "Add Subscription"}
         </ModalHeader>
         <form onSubmit={handleSubmit} data-testid={"add-edit-form"}>
           <ModalBody pb={6}>
             {/* Form fields */}
-            <FormControl isRequired>
-              <FormLabel>Name </FormLabel>
-              <Input
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl mt={4} isRequired>
-              <FormLabel>Cost </FormLabel>
-              <Input
-                name="cost"
-                type="number"
-                value={formData.cost.toString()}
-                onChange={handleChange}
-              />
-            </FormControl>
-            <FormControl mt={4} isRequired>
-              <FormLabel>Billing Date </FormLabel>
-              <Input
-                name="billingDate"
-                type="date"
-                value={formData.billingDate}
-                onChange={handleChange}
-                min={min}
-                max={max}
-                required
-              />
-            </FormControl>
+            {formInputs}
             <FormControl mt={4} display="flex" alignItems="center">
               <FormLabel htmlFor="status" mb="0">
-                {" "}
-                Suspend{" "}
+                Suspend
               </FormLabel>
               <Switch
                 id="status"
@@ -177,17 +182,14 @@ const AddEditSubscriptionForm = ({
           <ModalFooter>
             {subscription && (
               <Button colorScheme="red" mr={3} onClick={handleDelete}>
-                {" "}
-                Delete{" "}
+                Delete
               </Button>
             )}
-            <Button colorScheme="blue" type="submit">
-              {" "}
-              Save{" "}
+            <Button colorScheme="blue" mr={3} type="submit">
+              Save
             </Button>
             <Button variant="ghost" onClick={onClose}>
-              {" "}
-              Cancel{" "}
+              Cancel
             </Button>
           </ModalFooter>
         </form>
