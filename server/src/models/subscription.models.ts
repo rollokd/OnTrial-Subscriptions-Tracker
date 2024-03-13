@@ -1,4 +1,5 @@
-import { Schema, model, type Types } from 'mongoose'
+import mongoose from './index.models'
+import { type Types } from 'mongoose'
 
 export interface SUBSCRIPTION {
   _id?: Types.ObjectId
@@ -7,13 +8,13 @@ export interface SUBSCRIPTION {
   billingDate: Date
   status: boolean
 }
-const subscriptionSchema = new Schema<SUBSCRIPTION>({
+const subscriptionSchema = new mongoose.Schema<SUBSCRIPTION>({
   name: { type: String, required: true },
   cost: { type: Number, required: true },
   billingDate: { type: Date, required: true },
   status: { type: Boolean, required: true }
 })
 
-const Subscription = model<SUBSCRIPTION>('subscription', subscriptionSchema)
+const Subscription = mongoose.model<SUBSCRIPTION>('subscription', subscriptionSchema)
 
 export default Subscription

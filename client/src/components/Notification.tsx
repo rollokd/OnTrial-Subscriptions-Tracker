@@ -11,7 +11,9 @@ import {
   PopoverContent,
   PopoverBody,
   Text,
-  useToast
+  useToast,
+  border,
+  color,
 } from "@chakra-ui/react";
 import apiService from "../services/apiService";
 import { NOTIFICATION } from "../utils/definitions";
@@ -20,8 +22,8 @@ import { generateToastConfig } from "../utils/toastUtils";
 const Notification = () => {
   const [notifications, setNotifications] = useState<NOTIFICATION[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const toast = useToast()
-  console.log(notifications)
+  const toast = useToast();
+  console.log(notifications);
 
   // const popoverRef = useRef(null);
 
@@ -46,33 +48,33 @@ const Notification = () => {
   const renderMessage = (message: string) => {
     const subscriptionName = message;
     return (
-      <>
+      <Box>
         Your subscription for{" "}
         <Text as="span" fontWeight="bold" fontSize="lg">
           {subscriptionName}
         </Text>{" "}
         is due tomorrow.
-      </>
+      </Box>
     );
   };
   const handleChange = async (notification: NOTIFICATION) => {
     if (notification._id === undefined) {
-      return toast(generateToastConfig("error", "error deleting notification"))
+      return toast(generateToastConfig("error", "error deleting notification"));
     } else {
-      console.log(notification._id)
-      const deleteNotif = await apiService.deleteNotification(notification._id)
+      console.log(notification._id);
+      const deleteNotif = await apiService.deleteNotification(notification._id);
       if (deleteNotif !== undefined) {
-        setNotifications((prev) => prev.filter((oldNotification) => {
-          console.log('setting new notifs')
-          return oldNotification._id !== notification._id
-
-        }))
+        setNotifications((prev) =>
+          prev.filter((oldNotification) => {
+            console.log("setting new notifs");
+            return oldNotification._id !== notification._id;
+          })
+        );
       } else {
-        toast(generateToastConfig("error", "no response from the database"))
+        toast(generateToastConfig("error", "no response from the database"));
       }
     }
-
-  }
+  };
 
   return (
     <Popover
@@ -103,18 +105,19 @@ const Notification = () => {
           ) : (
             <List>
               {notifications.map((notification) => (
-                <ListItem flexDirection={"row"} key={notification._id}>
-                  {renderMessage(notification.message)}
-
-                  <Flex align="center">
-                    <Button
-                      // isChecked={notification.read}
-                      onClick={() => handleChange(notification)}
-                    >
+                <ListItem
+                  key={notification._id}
+                  p={2}
+                  borderBottom={"1px"}
+                  borderColor={"black"}
+                  _last={{ border: "none" }}
+                >
+                  <Flex direction={"row"} align="center" gap={5}>
+                    {renderMessage(notification.message)}
+                    <Button onClick={() => handleChange(notification)}>
                       <DeleteIcon w={4} h={4}></DeleteIcon>
                     </Button>
                   </Flex>
-
                 </ListItem>
               ))}
             </List>

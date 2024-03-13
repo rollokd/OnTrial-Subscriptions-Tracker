@@ -1,5 +1,5 @@
-import Subscription, { type SUBSCRIPTION } from '../models/subscription'
-import Notification, { type NOTIFICATION } from '../models/notification'
+import Subscription, { type SUBSCRIPTION } from '../models/subscription.models'
+import Notification, { type NOTIFICATION } from '../models/notification.models'
 import { type HydratedDocument } from 'mongoose'
 import { type Response, type Request } from 'express'
 import asyncHandler from 'express-async-handler'

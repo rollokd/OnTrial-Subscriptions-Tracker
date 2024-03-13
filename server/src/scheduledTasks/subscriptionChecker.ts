@@ -1,6 +1,6 @@
 import { CronJob } from 'cron'
 import { differenceInCalendarDays } from 'date-fns'
-import Subscription from '../models/subscription'
+import Subscription from '../models/subscription.models'
 import addNotification from '../utils/notificationUtils'
 
 const checkSubscriptionsAndNotify = async (): Promise<void> => {

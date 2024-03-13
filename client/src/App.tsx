@@ -6,7 +6,7 @@ import theme from "./theme/theme";
 import { Sorting, Filtering } from "./utils/definitions";
 
 function App() {
-  const [sortCriteria, setSortCriteria] = useState<Sorting>("");
+  const [sortCriteria, setSortCriteria] = useState<Sorting>("billDate");
   const [filterCriteria, setFilterCriteria] = useState<Filtering>("all");
 
   return (
