@@ -3,9 +3,11 @@ import express from 'express'
 import router from '../src/router'
 import supertest from 'supertest'
 import Notification from '../src/models/notification.models'
-import Subscription, { type SUBSCRIPTION } from '../src/models/subscription.models'
+import Subscription from '../src/models/subscription.models'
 import mongoose from 'mongoose'
 const database = 'test'
+
+console.log(process.env.NODE_ENV)
 
 describe('Integration tests', () => {
   const app = express()
@@ -23,6 +25,7 @@ describe('Integration tests', () => {
     await Subscription.deleteMany()
     await Notification.deleteMany()
     await db.disconnect()
+    await db.connection.close()
   })
 
   describe('unhappy integrations', () => {

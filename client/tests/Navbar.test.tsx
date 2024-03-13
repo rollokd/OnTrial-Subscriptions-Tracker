@@ -2,8 +2,8 @@ import Navbar from "../src/components/Navbar";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-const setFilter = vi.fn(() => { });
-const setSorting = vi.fn(() => { });
+const setFilter = vi.fn(() => {});
+const setSorting = vi.fn(() => {});
 
 beforeEach(async () => {
   render(<Navbar setFilterCriteria={setFilter} setSortCriteria={setSorting} />);
@@ -43,7 +43,7 @@ describe("Navbar", () => {
 
     const billDateBtn = screen.getByRole("menuitem", { name: "Bill Date" });
     await userEvent.click(billDateBtn);
-    const AlphaBtn = screen.getByRole("menuitem", { name: "Alphabetic" });
+    const AlphaBtn = screen.getByRole("menuitem", { name: "Alphabetical" });
     await userEvent.click(AlphaBtn);
     const ExpenseBtn = screen.getByRole("menuitem", { name: "Most Expensive" });
     await userEvent.click(ExpenseBtn);

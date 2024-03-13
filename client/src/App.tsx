@@ -1,4 +1,4 @@
-import { ChakraProvider, CSSReset, GlobalStyle, Box } from "@chakra-ui/react";
+import { ChakraProvider, CSSReset, GlobalStyle, Flex } from "@chakra-ui/react";
 import Dashboard from "./components/Dashboard";
 import Navbar from "./components/Navbar";
 import { useState } from "react";
@@ -13,9 +13,10 @@ function App() {
     <ChakraProvider theme={theme}>
       <CSSReset />
       <GlobalStyle />
-      <Box
-        minH="100vh"
-        width="800px"
+      <Flex
+        direction={"column"}
+        height="100vh"
+        width="75%"
         marginX="auto"
         border="2px solid"
         borderColor="blue.300"
@@ -29,7 +30,7 @@ function App() {
           sortCriteria={sortCriteria}
           filterCriteria={filterCriteria}
         />
-      </Box>
+      </Flex>
     </ChakraProvider>
   );
 }

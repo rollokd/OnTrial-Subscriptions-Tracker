@@ -1,11 +1,11 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Box, Flex, Button, Text } from "@chakra-ui/react";
 import SubscriptionList from "./SubscriptionList";
 import AddEditSubscriptionForm from "./AddEditSubscriptionForm";
 import apiService from "../services/apiService";
 import Notification from "./Notification";
-import { Subscription } from "../utils/definitions";
-import { calculateRenewalText } from "../utils/dateUtils";
+import { Filtering, Sorting, Subscription } from "../utils/definitions";
+import { filterSubscriptions, sortSubscriptions } from "../utils/helper";
 
 // const initialState = {
 //   name: '',
@@ -17,8 +17,8 @@ const Dashboard = ({
   sortCriteria,
   filterCriteria,
 }: {
-  sortCriteria: string;
-  filterCriteria: string;
+  sortCriteria: Sorting;
+  filterCriteria: Filtering;
 }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   // TODO: type maybe need to be null on init
@@ -29,35 +29,13 @@ const Dashboard = ({
   // Define applySortAndFilter inside useCallback to memoize it
   const applySortAndFilter = useCallback(
     (data: Subscription[]) => {
-      let result = data;
-
       // Filter
-      if (filterCriteria !== "all") {
-        result = result.filter((sub) =>
-          filterCriteria === "active" ? sub.status : !sub.status
-        );
-      }
+      data = filterSubscriptions(data, filterCriteria);
 
       // Sort
-      result.sort((a, b) => {
-        switch (sortCriteria) {
-          case "alphabetical":
-            return a.name.localeCompare(b.name);
-          case "billDate":
-            return (
-              calculateRenewalText(a.billingDate).daysToPayment -
-              calculateRenewalText(b.billingDate).daysToPayment
-            );
-          case "mostExpensive":
-            return b.cost - a.cost;
-          case "cheapest":
-            return a.cost - b.cost;
-          default:
-            return 0;
-        }
-      });
+      data = sortSubscriptions(data, sortCriteria);
 
-      setSubscriptions(result);
+      setSubscriptions(data);
     },
     [filterCriteria, sortCriteria]
   );
@@ -88,18 +66,22 @@ const Dashboard = ({
     refreshSubscriptions();
   };
 
-  const totalCost = subscriptions
-    .filter((sub) => sub.status)
-    .reduce((acc, curr) => acc + curr.cost, 0);
-  const averageExpenses = totalCost.toFixed(2);
+  const averageExpenses = useMemo(
+    () =>
+      subscriptions
+        .filter((sub) => sub.status)
+        .reduce((acc, curr) => acc + curr.cost, 0)
+        .toFixed(2),
+    [subscriptions]
+  );
 
   return (
     <Flex
       direction="column"
       bg="#ADC4CE"
-      width="795px"
-      minHeight="90vh"
-      borderRadius="md"
+      width="100%"
+      height={"100%"}
+      borderRadius="lg"
       p={4}
     >
       <Flex justifyContent="space-between" alignItems="center">

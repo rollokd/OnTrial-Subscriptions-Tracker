@@ -12,8 +12,6 @@ import {
   PopoverBody,
   Text,
   useToast,
-  border,
-  color,
 } from "@chakra-ui/react";
 import apiService from "../services/apiService";
 import { NOTIFICATION } from "../utils/definitions";
@@ -23,14 +21,6 @@ const Notification = () => {
   const [notifications, setNotifications] = useState<NOTIFICATION[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const toast = useToast();
-  console.log(notifications);
-
-  // const popoverRef = useRef(null);
-
-  // useOutsideClick({
-  //   ref: popoverRef,
-  //   handler: () => setIsOpen(false),
-  // });
 
   useEffect(() => {
     const loadNotifications = async () => {
@@ -81,6 +71,7 @@ const Notification = () => {
       isOpen={isOpen}
       onOpen={() => setIsOpen(true)}
       onClose={() => setIsOpen(false)}
+      isLazy
     >
       <PopoverTrigger>
         <Button variant="ghost">

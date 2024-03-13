@@ -16,6 +16,7 @@ import {
 import { generateToastConfig } from "../utils/toastUtils";
 import apiService from "../services/apiService";
 import { Subscription } from "../utils/definitions";
+import { getInputType, getMinMax, toCapitalCase } from "../utils/helper";
 
 // Initial form
 const initialFormState = {
@@ -111,30 +112,7 @@ const AddEditSubscriptionForm = ({
     }
   };
 
-  const year = new Date().getFullYear();
-  const month = new Date().getMonth() + 1;
-  const day = new Date().getDate();
-
-  const min = `${year}-${month < 10 ? "0" + month : month}-${day}`;
-  const max = `${year}-${month < 10 ? "0" + (month + 1) : month}-${day}`;
-
-  function getInputType(key: string) {
-    switch (key) {
-      case "name":
-        return "text";
-      case "cost":
-        return "number";
-      case "billingDate":
-        return "date";
-      case "status":
-        return;
-    }
-  }
-
-  function toCapitalCase(input: string) {
-    const result = input.replace(/([A-Z])/g, " $1");
-    return input.charAt(0).toUpperCase() + result.slice(1);
-  }
+  const [min, max] = getMinMax();
 
   const formInputs = [];
   for (const [key, value] of Object.entries(formData)) {

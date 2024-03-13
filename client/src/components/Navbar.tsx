@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { Sorting, Filtering } from "../utils/definitions";
+import { toCapitalCase } from "../utils/helper";
 
 const Navbar = ({
   setSortCriteria,
@@ -25,12 +26,38 @@ const Navbar = ({
   const handleFilterSelection = (criteria: Filtering) => {
     setFilterCriteria(criteria);
   };
+
+  const sortingOptions: Sorting[] = [
+    "alphabetical",
+    "billDate",
+    "mostExpensive",
+    "cheapest",
+  ];
+
+  const sortMenuItems = sortingOptions.map((item, index) => {
+    return (
+      <MenuItem key={index} onClick={() => handleSortSelection(item)}>
+        {toCapitalCase(item)}
+      </MenuItem>
+    );
+  });
+
+  const filterOptions: Filtering[] = ["all", "active", "suspended"];
+
+  const filterMenuItems = filterOptions.map((item, index) => {
+    return (
+      <MenuItem key={index} onClick={() => handleFilterSelection(item)}>
+        {toCapitalCase(item)} Subscriptions
+      </MenuItem>
+    );
+  });
+
   return (
     <Box
       bg="#ADC4CE"
       px={{ base: 2, sm: 2, md: 4 }}
       color="black"
-      w="795px"
+      w="auto"
       borderRadius="lg"
       mb={1}
       position="relative"
@@ -41,20 +68,7 @@ const Navbar = ({
           <MenuButton as={Button} leftIcon={<HamburgerIcon />} mr={4}>
             Sort
           </MenuButton>
-          <MenuList>
-            <MenuItem onClick={() => handleSortSelection("alphabetical")}>
-              Alphabetic
-            </MenuItem>
-            <MenuItem onClick={() => handleSortSelection("billDate")}>
-              Bill Date
-            </MenuItem>
-            <MenuItem onClick={() => handleSortSelection("mostExpensive")}>
-              Most Expensive
-            </MenuItem>
-            <MenuItem onClick={() => handleSortSelection("cheapest")}>
-              Cheapest
-            </MenuItem>
-          </MenuList>
+          <MenuList>{sortMenuItems}</MenuList>
         </Menu>
 
         <Flex flexDirection="column" align="center">
@@ -81,17 +95,7 @@ const Navbar = ({
           <MenuButton as={Button} rightIcon={<TriangleDownIcon />}>
             Filter
           </MenuButton>
-          <MenuList>
-            <MenuItem onClick={() => handleFilterSelection("all")}>
-              All Subscriptions
-            </MenuItem>
-            <MenuItem onClick={() => handleFilterSelection("active")}>
-              Active Subscriptions
-            </MenuItem>
-            <MenuItem onClick={() => handleFilterSelection("suspended")}>
-              Suspended Subscriptions
-            </MenuItem>
-          </MenuList>
+          <MenuList>{filterMenuItems}</MenuList>
         </Menu>
       </Flex>
     </Box>

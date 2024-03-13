@@ -14,11 +14,11 @@ type Data = SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[] | NOTIFICATION
 interface DataType {
   data: Data
 }
-function errorRes(message: string): ErrorType {
+function errorRes (message: string): ErrorType {
   return { errors: { message } }
 }
 
-function dataResponse(data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[] | NOTIFICATION): DataType {
+function dataResponse (data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[] | NOTIFICATION): DataType {
   return { data }
 }
 

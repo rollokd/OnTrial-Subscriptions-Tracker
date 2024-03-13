@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.79% </span>
+                <span class="strong">87.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>133/136</span>
+                <span class='fraction'>122/140</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.79% </span>
+                <span class="strong">87.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>133/136</span>
+                <span class='fraction'>122/140</span>
             </div>
         
             
@@ -199,7 +199,13 @@
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
 <a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -232,20 +238,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -324,6 +316,22 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -335,10 +343,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import Subscription, { type SUBSCRIPTION } from '../models/subscription'
-import Notification, { type NOTIFICATION } from '../models/notification'
-import { Error, type HydratedDocument } from 'mongoose'
-import { type Response, type Request, type NextFunction } from 'express'
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import Subscription, { type SUBSCRIPTION } from '../models/subscription.models'
+import Notification, { type NOTIFICATION } from '../models/notification.models'
+import { type HydratedDocument } from 'mongoose'
+import { type Response, type Request } from 'express'
 import asyncHandler from 'express-async-handler'
 &nbsp;
 interface ErrorType {
@@ -346,14 +354,16 @@ interface ErrorType {
     message: string
   }
 }
+type Data = SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[] | NOTIFICATION
+&nbsp;
 interface DataType {
-  data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]
+  data: Data
 }
-function errorRes(message: string): ErrorType {
+function errorRes (message: string): ErrorType {
   return { errors: { message } }
 }
 &nbsp;
-function dataResponse(data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]): DataType {
+function dataResponse (data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[] | NOTIFICATION): DataType {
   return { data }
 }
 &nbsp;
@@ -368,20 +378,6 @@ export const getSubs = async (req: Request, res: Response): Promise&lt;void&gt; 
     console.error('Error fetching subscriptions:', error)
   }
 }
-// export const getSubs = (req: Request, res: Response): void =&gt; {
-//   Subscription.find()
-//     .then((subscriptions) =&gt;
-//       res.send(dataResponse(subscriptions))
-//     )
-//     .catch((err) =&gt; {
-//       if (err instanceof Error) {
-//         res.status(500).send({
-//           errors: { message: 'There was an error fetching the subscriptions' }
-//         })
-//         console.error('Error fetching subscriptions:', err)
-//       }
-//     })
-// }
 &nbsp;
 export const addSub = async (req: Request, res: Response): Promise&lt;void&gt; =&gt; {
   try {
@@ -459,6 +455,22 @@ export const deleteSub = asyncHandler(async (req: Request, res: Response): Promi
     console.error('deletion error', error)
   }
 })
+export const deleteNotif = asyncHandler(async (req: Request, res: Response): Promise&lt;void&gt; =&gt; {
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    if (req.params.id === undefined) res.status(400).json(errorRes('No id'))</span>
+<span class="cstat-no" title="statement not covered" >    const deletedNotification = await Notification.findByIdAndDelete(</span>
+<span class="cstat-no" title="statement not covered" >      req.params.id</span>
+<span class="cstat-no" title="statement not covered" >    )</span>
+<span class="cstat-no" title="statement not covered" >    if (deletedNotification === undefined || deletedNotification === null) {</span>
+<span class="cstat-no" title="statement not covered" >      res.status(404).send('Subscription not found')</span>
+<span class="cstat-no" title="statement not covered" >    } else {</span>
+<span class="cstat-no" title="statement not covered" >      res.send(dataResponse(deletedNotification))</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >  } catch (error) {</span>
+<span class="cstat-no" title="statement not covered" >    res.status(500).send(errorRes('Deletion unsuccessful'))</span>
+<span class="cstat-no" title="statement not covered" >    console.error('deletion error', error)</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" >})</span>
 &nbsp;
 export const getNotification = asyncHandler(async (req: Request, res: Response): Promise&lt;void&gt; =&gt; {
   try {
@@ -478,7 +490,7 @@ export const getNotification = asyncHandler(async (req: Request, res: Response):
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-12T19:48:28.550Z
+                at 2024-03-13T18:29:44.575Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
