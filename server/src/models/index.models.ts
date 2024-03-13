@@ -1,12 +1,15 @@
 import mongoose from 'mongoose'
 
-const dbConnection: string = process.env.PROD_DB ?? 'mongodb://localhost:27017/Subscriptions'
+const dbConnection: string = process.env.DB_URL ?? 'mongodb://localhost:27017/Subscriptions'
 
 // MongoDB connection
-console.log(process.env.NODE_ENV)
-if (process.env.NODE_ENV !== 'test') {
+console.log(process.env)
+if (process.env.NODE_ENV === 'production') {
   mongoose
-    .connect(dbConnection)
+    .connect(dbConnection, {
+      dbName: 'onTrial',
+      writeConcern: { w: 'majority' }
+    })
     .then(() => { console.log('MongoDB connected') })
     .catch((err) => { console.error('Could not connect to MongoDB...', err) })
 }
