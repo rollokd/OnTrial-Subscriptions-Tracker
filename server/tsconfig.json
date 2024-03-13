@@ -100,7 +100,8 @@
   },
   "include": [
     "src/**/*",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "tests/*"
   ],
   "exclude": [
     "node_modules",
