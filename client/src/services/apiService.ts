@@ -111,4 +111,22 @@ export default {
       return Promise.reject(error);
     }
   },
+  deleteNotification: async (id: string): Promise<NOTIFICATION> => {
+    const response = await fetch(`${BASE_URL}/notifications/${id}`, {
+      method: "DELETE",
+    });
+    const { data, errors }: JSONResponse<NOTIFICATION> = await response.json();
+    if (response.ok) {
+      const notification = data;
+      if (notification) {
+        return notification;
+      } else {
+        return Promise.reject(new Error("Unable to delete notification"));
+      }
+    } else {
+      const error = new Error(errors?.message);
+      return Promise.reject(error);
+    }
+  }
+
 };

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { BellIcon } from "@chakra-ui/icons";
+import { BellIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
+  Flex,
   Box,
   Button,
   List,
@@ -10,13 +11,18 @@ import {
   PopoverContent,
   PopoverBody,
   Text,
+  useToast
 } from "@chakra-ui/react";
 import apiService from "../services/apiService";
 import { NOTIFICATION } from "../utils/definitions";
+import { generateToastConfig } from "../utils/toastUtils";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState<NOTIFICATION[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const toast = useToast()
+  console.log(notifications)
+
   // const popoverRef = useRef(null);
 
   // useOutsideClick({
@@ -49,6 +55,24 @@ const Notification = () => {
       </>
     );
   };
+  const handleChange = async (notification: NOTIFICATION) => {
+    if (notification._id === undefined) {
+      return toast(generateToastConfig("error", "error deleting notification"))
+    } else {
+      console.log(notification._id)
+      const deleteNotif = await apiService.deleteNotification(notification._id)
+      if (deleteNotif !== undefined) {
+        setNotifications((prev) => prev.filter((oldNotification) => {
+          console.log('setting new notifs')
+          return oldNotification._id !== notification._id
+
+        }))
+      } else {
+        toast(generateToastConfig("error", "no response from the database"))
+      }
+    }
+
+  }
 
   return (
     <Popover
@@ -79,8 +103,18 @@ const Notification = () => {
           ) : (
             <List>
               {notifications.map((notification) => (
-                <ListItem key={notification._id}>
+                <ListItem flexDirection={"row"} key={notification._id}>
                   {renderMessage(notification.message)}
+
+                  <Flex align="center">
+                    <Button
+                      // isChecked={notification.read}
+                      onClick={() => handleChange(notification)}
+                    >
+                      <DeleteIcon w={4} h={4}></DeleteIcon>
+                    </Button>
+                  </Flex>
+
                 </ListItem>
               ))}
             </List>
