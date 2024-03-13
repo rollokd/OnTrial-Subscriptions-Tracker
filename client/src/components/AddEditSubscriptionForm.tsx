@@ -40,6 +40,8 @@ const AddEditSubscriptionForm = ({
   const [formData, setFormData] = useState<Subscription>(initialFormState);
   const toast = useToast();
 
+  console.log("incoming", subscription);
+
   useEffect(() => {
     setFormData(
       subscription && isOpen
@@ -111,6 +113,13 @@ const AddEditSubscriptionForm = ({
     }
   };
 
+  const year = new Date().getFullYear();
+  const month = new Date().getMonth() + 1;
+  const day = new Date().getDate();
+
+  const min = `${year}-${month < 10 ? "0" + month : month}-${day}`;
+  const max = `${year}-${month < 10 ? "0" + (month + 1) : month}-${day}`;
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -145,6 +154,9 @@ const AddEditSubscriptionForm = ({
                 type="date"
                 value={formData.billingDate}
                 onChange={handleChange}
+                min={min}
+                max={max}
+                required
               />
             </FormControl>
             <FormControl mt={4} display="flex" alignItems="center">

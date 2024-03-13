@@ -5,6 +5,7 @@ import AddEditSubscriptionForm from "./AddEditSubscriptionForm";
 import apiService from "../services/apiService";
 import Notification from "./Notification";
 import { Subscription } from "../utils/definitions";
+import { calculateRenewalText } from "../utils/dateUtils";
 
 // const initialState = {
 //   name: '',
@@ -44,8 +45,8 @@ const Dashboard = ({
             return a.name.localeCompare(b.name);
           case "billDate":
             return (
-              new Date(a.billingDate).valueOf() -
-              new Date(b.billingDate).valueOf()
+              calculateRenewalText(a.billingDate).daysToPayment -
+              calculateRenewalText(b.billingDate).daysToPayment
             );
           case "mostExpensive":
             return b.cost - a.cost;

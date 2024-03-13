@@ -9,7 +9,7 @@ const SubscriptionItem = ({
   subscription: Subscription;
   onEdit: () => void;
 }) => {
-  const renewalText = calculateRenewalText(subscription.billingDate);
+  const renewalText = calculateRenewalText(subscription.billingDate).message;
   // subscription.name = 'bob'
 
   return (
