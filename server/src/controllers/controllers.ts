@@ -1,7 +1,7 @@
 import Subscription, { type SUBSCRIPTION } from '../models/subscription'
 import Notification, { type NOTIFICATION } from '../models/notification'
-import { Error, type HydratedDocument } from 'mongoose'
-import { type Response, type Request, type NextFunction } from 'express'
+import { type HydratedDocument } from 'mongoose'
+import { type Response, type Request } from 'express'
 import asyncHandler from 'express-async-handler'
 
 interface ErrorType {
@@ -9,14 +9,16 @@ interface ErrorType {
     message: string
   }
 }
+type Data = SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[] | NOTIFICATION
+
 interface DataType {
-  data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]
+  data: Data
 }
 function errorRes(message: string): ErrorType {
   return { errors: { message } }
 }
 
-function dataResponse(data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[]): DataType {
+function dataResponse(data: SUBSCRIPTION | SUBSCRIPTION[] | NOTIFICATION[] | NOTIFICATION): DataType {
   return { data }
 }
 
@@ -31,20 +33,6 @@ export const getSubs = async (req: Request, res: Response): Promise<void> => {
     console.error('Error fetching subscriptions:', error)
   }
 }
-// export const getSubs = (req: Request, res: Response): void => {
-//   Subscription.find()
-//     .then((subscriptions) =>
-//       res.send(dataResponse(subscriptions))
-//     )
-//     .catch((err) => {
-//       if (err instanceof Error) {
-//         res.status(500).send({
-//           errors: { message: 'There was an error fetching the subscriptions' }
-//         })
-//         console.error('Error fetching subscriptions:', err)
-//       }
-//     })
-// }
 
 export const addSub = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -116,6 +104,22 @@ export const deleteSub = asyncHandler(async (req: Request, res: Response): Promi
       res.status(404).send('Subscription not found')
     } else {
       res.send(dataResponse(deletedSubscription))
+    }
+  } catch (error) {
+    res.status(500).send(errorRes('Deletion unsuccessful'))
+    console.error('deletion error', error)
+  }
+})
+export const deleteNotif = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  try {
+    if (req.params.id === undefined) res.status(400).json(errorRes('No id'))
+    const deletedNotification = await Notification.findByIdAndDelete(
+      req.params.id
+    )
+    if (deletedNotification === undefined || deletedNotification === null) {
+      res.status(404).send('Subscription not found')
+    } else {
+      res.send(dataResponse(deletedNotification))
     }
   } catch (error) {
     res.status(500).send(errorRes('Deletion unsuccessful'))
