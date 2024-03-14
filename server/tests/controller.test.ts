@@ -38,7 +38,7 @@ describe('Integration tests', () => {
     })
 
     it('should return an error if the database fails', async () => {
-      return request
+      await request
         .get('/subscriptions')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -48,7 +48,7 @@ describe('Integration tests', () => {
         })
     })
     it('should return an error if the database fails', async () => {
-      return request
+      await request
         .get('/notifications')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -64,7 +64,7 @@ describe('Integration tests', () => {
         status: true,
         billingDate: '2024-03-12T00:00:00.000Z'
       }
-      return request
+      await request
         .post('/subscriptions')
         .set('Content-Type', 'application/json')
         .send(subs)
@@ -81,7 +81,7 @@ describe('Integration tests', () => {
       await Subscription.create({ name: 'Spotify', cost: '4.99', billingDate: '2024-04-16T00:00:00.000Z', status: true })
       await Subscription.create({ name: 'Disney+', cost: '5.99', billingDate: '2024-06-18T00:00:00.000Z', status: false })
 
-      return request
+      await request
         .get('/subscriptions')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -96,7 +96,7 @@ describe('Integration tests', () => {
       await Notification.create({ message: 'Spotify', date: '2024-04-16T00:00:00.000Z', read: false })
       await Notification.create({ message: 'Disney+', date: '2024-06-18T00:00:00.000Z', read: false })
 
-      return request
+      await request
         .get('/notifications')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -108,14 +108,14 @@ describe('Integration tests', () => {
   })
 
   describe('POST request', () => {
-    it('should receive correct status code on success', () => {
+    it('should receive correct status code on success', async () => {
       const subs = {
         name: 'somethingCrazy',
         cost: 2.59,
         billingDate: '2024-03-12T00:00:00.000Z',
         status: true
       }
-      return request
+      await request
         .post('/subscriptions')
         .set('Content-Type', 'application/json')
         .send(subs)
@@ -123,14 +123,14 @@ describe('Integration tests', () => {
           expect(response.statusCode).toBe(200)
         })
     })
-    it('should post the right value', () => {
+    it('should post the right value', async () => {
       const subs = {
         name: 'somethingCrazy',
         cost: 2.59,
         billingDate: '2024-03-12T00:00:00.000Z',
         status: true
       }
-      return request
+      await request
         .post('/subscriptions')
         .set('Content-Type', 'application/json')
         .send(subs)
@@ -143,13 +143,13 @@ describe('Integration tests', () => {
           })
         })
     })
-    it('should receive correct status code on failure', () => {
+    it('should receive correct status code on failure', async () => {
       const subs = {
         name: 'somethingCrazy',
         cost: 2.59,
         status: true
       }
-      return request
+      await request
         .post('/subscriptions')
         .set('Content-Type', 'application/json')
         .send(subs)
@@ -161,7 +161,7 @@ describe('Integration tests', () => {
   describe('DELETE request', () => {
     it('should correctly delete the item', async () => {
       const sub = await Subscription.create({ name: 'Patreon', cost: '7.99', billingDate: '2024-03-14T00:00:00.000Z', status: true })
-      return request.delete('/subscriptions/' + sub._id.toString()).expect(200).expect('Content-Type', /json/).then(async (response) => {
+      await request.delete('/subscriptions/' + sub._id.toString()).expect(200).expect('Content-Type', /json/).then(async (response) => {
         const check = await Subscription.findById(sub._id)
         console.log(check)
         expect(check).toBeNull()
@@ -169,7 +169,7 @@ describe('Integration tests', () => {
       })
     })
     it('should fail if given an invalid id', async () => {
-      return request.delete('/subscriptions/' + 123).expect(500).expect('Content-Type', /json/).then(async (response) => {
+      await request.delete('/subscriptions/' + 123).expect(500).expect('Content-Type', /json/).then(async (response) => {
         expect(response.body.errors.message).toBe('Deletion unsuccessful')
       })
     })
@@ -178,7 +178,7 @@ describe('Integration tests', () => {
     it('should change the right value when updating', async () => {
       const sub = await Subscription.create({ name: 'Netflix', cost: '2.99', billingDate: '2025-03-14T00:00:00.000Z', status: true })
       console.log(sub.name)
-      return request
+      await request
         .put(`/subscriptions/${sub._id.toString()}`)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
@@ -198,7 +198,7 @@ describe('Integration tests', () => {
     it('should receive correct status code on failure', async () => {
       const sub = await Subscription.create({ name: 'Netflix', cost: '2.99', billingDate: '2025-03-14T00:00:00.000Z', status: true })
 
-      return request
+      await request
         .put(`/subscriptions/${sub._id.toString()}`)
         .send({
           _id: sub._id,
@@ -214,7 +214,7 @@ describe('Integration tests', () => {
     it('should fail if given a wrong id', async () => {
       const sub = await Subscription.create({ name: 'Netflix', cost: '2.99', billingDate: '2025-03-14T00:00:00.000Z', status: true })
 
-      return request
+      await request
         .put('/subscriptions/124')
         .send({
           _id: sub._id,
