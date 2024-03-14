@@ -16,8 +16,8 @@ const checkSubscriptionsAndNotify = async (): Promise<void> => {
   }))
 }
 
-const hour = 14
-const minute = '08'
+const hour = '09'
+const minute = '49'
 // run every day at 7 AM
 const job = new CronJob(
   `${minute} ${hour} * * *`,

@@ -1,6 +1,6 @@
 import { UseToastOptions } from "@chakra-ui/react";
 
-export const generateToastConfig = (type: string, data?: string) => {
+export const generateToastConfig = (type: string, data?: string):UseToastOptions => {
   switch (type) {
     case "deleteSuccess":
       return {
@@ -9,7 +9,7 @@ export const generateToastConfig = (type: string, data?: string) => {
         status: "info",
         duration: 3000,
         isClosable: true,
-      } as UseToastOptions;
+      }
     case "addSuccess":
       return {
         title: "Subscription added.",
@@ -17,7 +17,7 @@ export const generateToastConfig = (type: string, data?: string) => {
         status: "success",
         duration: 3000,
         isClosable: true,
-      } as UseToastOptions;
+      }
     case "updateSuccess":
       return {
         title: "Subscription updated.",
@@ -25,7 +25,7 @@ export const generateToastConfig = (type: string, data?: string) => {
         status: "success",
         duration: 3000,
         isClosable: true,
-      } as UseToastOptions;
+      }
     case "error":
       return {
         title: "An error occurred.",
@@ -33,8 +33,8 @@ export const generateToastConfig = (type: string, data?: string) => {
         status: "error",
         duration: 3000,
         isClosable: true,
-      } as UseToastOptions;
+      }
     default:
-      return {} as UseToastOptions;
+      return {}
   }
 };
