@@ -1,6 +1,7 @@
 import { NOTIFICATION, Subscription } from "../utils/definitions";
 
-const BASE_URL = "http://localhost:3000";
+console.log(import.meta.env.VITE_SERVER_URL)
+const BASE_URL = import.meta.env.VITE_SERVER_URL ??  "http://localhost:3000";
 
 type JSONResponse<T> = {
   data?: T;
