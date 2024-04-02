@@ -4,7 +4,13 @@
 
 Take control of your subscriptions with OnTrial Subscription Tracker! Easily manage and monitor your subscriptions, and stay ahead of billing dates with timely notifications. Simplicity and awareness, all in one app
 
-<!-- ## 🚧 Refactoring and Testing
+## 🚧 Code Refactoring
+
+- Successfully migrated the entire codebase from JavaScript to TypeScript, enhancing type safety and readability.
+- Implemented modularization to enhance code organization and separation of concerns, improving maintainability.
+- Integrated and configured linting tools to enforce consistent code style standards throughout the project.
+
+<!--  and Testing
 
 - Our work here was to refactor this code base from Javascript to Typescript -->
 
