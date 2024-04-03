@@ -10,9 +10,10 @@ Take control of your subscriptions with OnTrial Subscription Tracker! Easily man
 - Implemented modularization to enhance code organization and separation of concerns, improving maintainability.
 - Integrated and configured linting tools to enforce consistent code style standards throughout the project.
 
-<!--  and Testing
-
-- Our work here was to refactor this code base from Javascript to Typescript -->
+## ⚠️ Testing
+- Conducted comprehensive testing of front-end components and APIs using Vitest and React Testing Library. Achieved a code coverage of 82%.
+- Implemented back-end testing with Jest and SuperTest to ensure the reliability and functionality of server-side processes. Achieved a code coverage of 86%.
+- Employed unit testing, mocking, and spies to simulate user interactions and verify the behavior of individual components and functions.
 
 ## 🚀 Features
 

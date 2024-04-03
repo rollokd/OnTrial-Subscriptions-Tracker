@@ -10,8 +10,12 @@ app.use(cors())
 app.use(express.json())
 app.use('/', subscriptionRouter)
 
-const port: number = 3000
-app.listen(port, () => {
+let port: string | number | undefined = process.env.PORT
+if (port === null || port === '') {
+  port = 8000
+}
+
+app.listen(Number(port), () => {
   console.log(`Server running on port ${port}`)
 })
 
