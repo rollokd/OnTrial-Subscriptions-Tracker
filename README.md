@@ -1,4 +1,4 @@
-![Header](./assets/header.png)
+![Header](./assets/onTrialBanner.png)
 
 # onTrial - Easily manage your subscriptions!
 
