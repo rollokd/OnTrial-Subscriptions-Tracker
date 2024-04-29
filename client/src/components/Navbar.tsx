@@ -6,11 +6,13 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Text,
+  // Text,
+  // Icon,
 } from "@chakra-ui/react";
 import { HamburgerIcon, TriangleDownIcon } from "@chakra-ui/icons";
 import { Sorting, Filtering } from "../utils/definitions";
 import { toCapitalCase } from "../utils/helper";
+import LOGO from "../assets/onTrialLOGOTherightHUE.png";
 
 const Navbar = ({
   setSortCriteria,
@@ -72,7 +74,7 @@ const Navbar = ({
         </Menu>
 
         <Flex flexDirection="column" align="center">
-          <Text
+          {/* <Text
             fontSize="4xl"
             fontWeight="bold"
             fontFamily="'Poppins', sans-serif"
@@ -88,7 +90,9 @@ const Navbar = ({
             as="i"
           >
             subscriptions tracker
-          </Text>
+          </Text> */}
+          <img src={LOGO} width={120} height={120} />
+
         </Flex>
 
         <Menu>
